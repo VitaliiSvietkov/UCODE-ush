@@ -4,10 +4,11 @@ int main(void) {
     struct winsize max;
     ioctl(0, TIOCGWINSZ, &max);
     
-    char *shell = "u$h> ";
+    //char *shell = "u$h> ";
     t_commands commands;
     while (true) {
-        mx_printstr(shell);
+        mx_type_prompt();
+        //mx_printstr(shell);
         char *input = (char *)malloc(max.ws_col);
         int read = mx_input(input, max.ws_col);
         if (read > max.ws_col - 5)
