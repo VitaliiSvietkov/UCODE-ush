@@ -16,5 +16,6 @@ uninstall: clean
 clean:
 	@make -C libmx/ clean
 	@rm -rdf ush
+	@rm -rdf inc/*.gch
 
 reinstall: uninstall ush
