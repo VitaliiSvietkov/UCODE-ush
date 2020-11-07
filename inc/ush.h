@@ -25,3 +25,6 @@ void mx_pwd(t_flags_pwd *flags);
 void mx_init_flags_pwd(t_flags_pwd *data);//set to default values
 void mx_set_flags_pwd(t_flags_pwd *data, char **flags);//set to passing values
 
+//CD block
+void mx_cd(char *path);
+

@@ -23,11 +23,16 @@ int main(void) {
                 if (errno == 1) {
                     free(cmd);
                     free(command);
-                    mx_del_strarr(&parameters);
+                    //mx_del_strarr(&parameters);
                     exit(1);
                 }
                 
                 mx_pwd(&pwd_flags);
+                exit(0);
+            }
+            
+            if (!mx_strcmp("cd", command)) {
+                mx_cd(parameters[1]);
                 exit(0);
             }
             
@@ -45,13 +50,13 @@ int main(void) {
         if (!mx_strcmp(command, "exit")) {
             free(cmd);
             free(command);
-            mx_del_strarr(&parameters);
+            //mx_del_strarr(&parameters);
             exit(0);
         }
         
         free(cmd);
         free(command);
-        mx_del_strarr(&parameters);
+        //mx_del_strarr(&parameters);
     }
     return 0;
 }
