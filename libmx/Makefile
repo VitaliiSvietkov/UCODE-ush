@@ -11,12 +11,12 @@ libmx:
 	@mv *.o ../obj
 	@ar -rc libmx.a ../obj/*.o
 	@ranlib libmx.a
-	@rm -rdf ../obj
 
 uninstall: clean
 	@rm -f libmx.a
 
 clean:
+	@rm -rdf ../obj
 	@rm -f inc/*.gch
 
 reinstall: uninstall libmx
