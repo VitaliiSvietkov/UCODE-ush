@@ -18,8 +18,8 @@ int mx_input(char *str, int win_len);
 //PWD block
 typedef struct s_flags_pwd
 {
-    bool using_L;//always true
-    bool using_P;
+    bool using_L;
+    bool using_P;//default
 }              t_flags_pwd;
 void mx_pwd(t_flags_pwd *flags);
 void mx_init_flags_pwd(t_flags_pwd *data);//set to default values
