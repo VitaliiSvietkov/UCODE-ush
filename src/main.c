@@ -1,6 +1,6 @@
 #include "../inc/ush.h"
 
-extern char **environ;
+//extern char **environ;
 
 int main(void) {
     char *cmd, *command, **parameters;
@@ -21,17 +21,25 @@ int main(void) {
             exit(0);
         }
         
+        //UNSET
+        if (!mx_strcmp("unset", command)) {
+            if (mx_unset_check_param(parameters) == 0) {
+            
+                for (int i = 1; parameters[i] != NULL; i++) {
+                    if (mx_unset(parameters[i]) < 0) {
+                        perror("ush: unset");
+                        continue;
+                    }
+                }
+                
+            }
+        }
+        
         /*char *str = getenv("PATH");
 	mx_printstr(str);
 	mx_printchar('\n');*/
         
         if (fork() == 0) {
-            
-            if (!mx_strcmp("unset", command)) {
-                for (int i = 1; parameters[i] != NULL; i++) {
-                    mx_unset(parameters[i]);
-                }
-            }
         
             if (!mx_strcmp("pwd", command)) {
                 t_flags_pwd pwd_flags;

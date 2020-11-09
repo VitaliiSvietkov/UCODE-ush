@@ -18,6 +18,8 @@ int mx_input(char *str, int win_len);
 
 //UNSET block
 int mx_unset(const char *name);
+int mx_unset_check_param(char **data); //how to unset a func?
+//how to check the READ_ONLY for a var name?
 
 //PWD block
 typedef struct s_flags_pwd
