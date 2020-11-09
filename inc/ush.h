@@ -1,4 +1,5 @@
 #pragma once
+#define _POSIX_C_SOURCE 200112L //for setenv() and unsetenv()
 #include <sys/wait.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
@@ -14,6 +15,9 @@
 void mx_type_prompt(void);
 void mx_read_command(char *cmd, char **par);
 int mx_input(char *str, int win_len);
+
+//UNSET block
+int mx_unset(const char *name);
 
 //PWD block
 typedef struct s_flags_pwd

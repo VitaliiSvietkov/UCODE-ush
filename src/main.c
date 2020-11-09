@@ -13,7 +13,25 @@ int main(void) {
         mx_type_prompt();
         mx_read_command(command, parameters);
         
+        //EXIT
+        if (!mx_strcmp(command, "exit")) {
+            free(cmd);
+            free(command);
+            //mx_del_strarr(&parameters);
+            exit(0);
+        }
+        
+        /*char *str = getenv("PATH");
+	mx_printstr(str);
+	mx_printchar('\n');*/
+        
         if (fork() == 0) {
+            
+            if (!mx_strcmp("unset", command)) {
+                for (int i = 1; parameters[i] != NULL; i++) {
+                    mx_unset(parameters[i]);
+                }
+            }
         
             if (!mx_strcmp("pwd", command)) {
                 t_flags_pwd pwd_flags;
@@ -46,17 +64,9 @@ int main(void) {
             wait (NULL); //wait for child
         }
         
-        //EXIT
-        if (!mx_strcmp(command, "exit")) {
-            free(cmd);
-            free(command);
-            //mx_del_strarr(&parameters);
-            exit(0);
-        }
-        
+        //mx_del_strarr(&parameters);
         free(cmd);
         free(command);
-        //mx_del_strarr(&parameters);
     }
     return 0;
 }
