@@ -12,6 +12,7 @@
 #include <limits.h>
 #include "../libmx/inc/libmx.h"
 
+extern char **environ;
 void mx_type_prompt(void);
 void mx_read_command(char *cmd, char **par);
 int mx_input(char *str, int win_len);
@@ -20,6 +21,9 @@ int mx_input(char *str, int win_len);
 int mx_unset(const char *name);
 int mx_unset_check_param(char **data); //how to unset a func?
 //how to check the READ_ONLY for a var name?
+
+//ENV block
+void mx_env(char **data);
 
 //PWD block
 typedef struct s_flags_pwd

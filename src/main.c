@@ -1,7 +1,5 @@
 #include "../inc/ush.h"
 
-//extern char **environ;
-
 int main(void) {
     char *cmd, *command, **parameters;
     //char *envp[] = { (char *)"PATH=/bin", 0 };
@@ -40,6 +38,10 @@ int main(void) {
 	mx_printchar('\n');*/
         
         if (fork() == 0) {
+        
+            if (!mx_strcmp("env", command)) {
+                mx_env(parameters);
+            }
         
             if (!mx_strcmp("pwd", command)) {
                 t_flags_pwd pwd_flags;
