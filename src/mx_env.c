@@ -1,6 +1,6 @@
 #include "../inc/ush.h"
 
-void mx_env(char **data) {
+void mx_env(t_flags_env *flags, char **data) {
     if (data[1] == NULL) { //print all variables
         int i = 1;
         char *s = *environ;
@@ -8,6 +8,15 @@ void mx_env(char **data) {
             mx_printstr(s);
             mx_printchar('\n');
             s = *(environ + i);
+        }
+    }
+    else {
+        if (flags->using_I) {
+            char *s = *environ;
+            for (int i = 1; s; i++) {
+                s = NULL;
+                s = *(environ + i);
+            }
         }
     }
 }

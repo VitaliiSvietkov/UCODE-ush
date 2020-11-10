@@ -2,7 +2,7 @@
 
 int main(void) {
     char *cmd, *command, **parameters;
-    //char *envp[] = { (char *)"PATH=/bin", 0 };
+    char *envp[] = { getenv("PATH"), 0 };
     while (true) {
         cmd = (char *)malloc(100);
         command = (char *)malloc(100);
@@ -33,14 +33,22 @@ int main(void) {
             }
         }
         
-        /*char *str = getenv("PATH");
-	mx_printstr(str);
-	mx_printchar('\n');*/
-        
         if (fork() == 0) {
         
             if (!mx_strcmp("env", command)) {
-                mx_env(parameters);
+                t_flags_env env_flags;
+                mx_env_flags_init(&env_flags);
+                mx_env_flags_set(&env_flags, parameters);
+                
+                if (errno == 1) {
+                    free(cmd);
+                    free(command);
+                    //mx_del_strarr(&parameters);
+                    exit(1);
+                }
+                
+                mx_env(&env_flags, parameters);
+                exit(0);
             }
         
             if (!mx_strcmp("pwd", command)) {
@@ -64,9 +72,9 @@ int main(void) {
                 exit(0);
             }
             
-            /*mx_strcpy(cmd, "/bin/");
+            mx_strcpy(cmd, "/bin/");
             mx_strcat(cmd, command);
-            execve(cmd, parameters, envp); //execute command*/
+            execve(cmd, parameters, envp); //execute command
             
             exit(0);
         }
@@ -74,9 +82,9 @@ int main(void) {
             wait (NULL); //wait for child
         }
         
-        //mx_del_strarr(&parameters);
         free(cmd);
         free(command);
+        //mx_del_strarr(&parameters);
     }
     return 0;
 }

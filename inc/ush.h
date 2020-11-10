@@ -23,7 +23,15 @@ int mx_unset_check_param(char **data); //how to unset a func?
 //how to check the READ_ONLY for a var name?
 
 //ENV block
-void mx_env(char **data);
+typedef struct s_flags_env
+{
+    bool using_I;
+    bool using_U;
+    bool using_P;
+}              t_flags_env;
+void mx_env(t_flags_env *flags, char **data);
+void mx_env_flags_init(t_flags_env *data);
+void mx_env_flags_set(t_flags_env *data, char **param);
 
 //PWD block
 typedef struct s_flags_pwd
