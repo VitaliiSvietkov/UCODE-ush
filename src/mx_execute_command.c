@@ -1,6 +1,6 @@
 #include "../inc/ush.h"
 
-void mx_execute_command(char *cmd, char *command, char **parameters, char *envp[]) {
+void mx_execute_command(char *cmd, char *command, char **parameters) {
     //EXIT
     if (!mx_strcmp(command, "exit")) {
         free(cmd);
@@ -26,18 +26,7 @@ void mx_execute_command(char *cmd, char *command, char **parameters, char *envp[
     if (fork() == 0) {
         
         if (!mx_strcmp("env", command)) {
-            t_flags_env env_flags;
-            mx_env_flags_init(&env_flags);
-            mx_env_flags_set(&env_flags, parameters);
-                
-            if (errno == 1) {
-                free(cmd);
-                free(command);
-                //mx_del_strarr(&parameters);
-                exit(1);
-            }
-                
-            mx_env(&env_flags, parameters);
+            mx_env(cmd, parameters);
             exit(0);
         }
         

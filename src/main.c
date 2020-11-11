@@ -8,8 +8,9 @@ void handle_sigint(int sig) {
 }
 
 int main(void) {
+    envp[0] = getenv("PATH");
+    envp[1] = 0;
     char *cmd, *command, **parameters;
-    char *envp[] = { getenv("PATH"), 0 };
     while (true) {
         signal(SIGINT, handle_sigint);
         cmd = (char *)malloc(100);
@@ -19,7 +20,7 @@ int main(void) {
         mx_type_prompt();
         mx_read_command(command, parameters);
         
-        mx_execute_command(cmd, command, parameters, envp);
+        mx_execute_command(cmd, command, parameters);
         
         free(cmd);
         free(command);

@@ -13,11 +13,12 @@
 #include <limits.h>
 #include "../libmx/inc/libmx.h"
 
+char *envp[2];
 extern char **environ;
 void mx_type_prompt(void);
 void mx_read_command(char *cmd, char **par);
 int mx_input(char *str, int win_len);
-void mx_execute_command(char *cmd, char *command, char **parameters, char *envp[]);
+void mx_execute_command(char *cmd, char *command, char **parameters);
 
 //UNSET block
 int mx_unset(const char *name);
@@ -31,9 +32,10 @@ typedef struct s_flags_env
     bool using_U;
     bool using_P;
 }              t_flags_env;
-void mx_env(t_flags_env *flags, char **data);
+void mx_env(char *cmd, char **parameters);
 void mx_env_flags_init(t_flags_env *data);
-void mx_env_flags_set(t_flags_env *data, char **param);
+void mx_env_flags_set(t_flags_env *data, char **param, char **env_command, 
+    char ***env_util_param, char **altpath);
 
 //PWD block
 typedef struct s_flags_pwd

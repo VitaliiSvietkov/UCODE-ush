@@ -1,6 +1,7 @@
 #include "../inc/ush.h"
 
-void mx_env_flags_set(t_flags_env *data, char **param) {
+void mx_env_flags_set(t_flags_env *data, char **param, char **env_command, 
+char ***env_util_param, char **altpath) {
     for (int i = 1; param[i] != NULL; i++) {
         if (param[i][0] == '-') {
         
@@ -16,9 +17,18 @@ void mx_env_flags_set(t_flags_env *data, char **param) {
                 
                 if (param[i][j] == 'i') data->using_I = true;
                 if (param[i][j] == 'u') data->using_U = true;
-                if (param[i][j] == 'P') data->using_P = true;
+                if (param[i][j] == 'P') {
+                    data->using_P = true;
+                    *altpath = mx_strdup(param[i + 1]);
+                }
             }
-            
+            if (altpath != NULL) i++;
+
+        }
+        else {
+            *env_util_param = param + i;
+            *env_command = mx_strdup(*env_util_param[0]);
+            break;
         }
     }
 }
