@@ -38,6 +38,7 @@ void mx_env(char *cmd, char **parameters) {
 
         }
 
+        mx_print_strarr(env_util_param, " ");
         mx_execute_command(cmd, env_command, env_util_param);
     }
 }

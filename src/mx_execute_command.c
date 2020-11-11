@@ -22,6 +22,11 @@ void mx_execute_command(char *cmd, char *command, char **parameters) {
                 
         }
     }
+
+    if (!mx_strcmp("cd", command)) {
+            mx_cd(parameters[1]);
+            //exit(0);
+        }
         
     if (fork() == 0) {
         
@@ -43,11 +48,6 @@ void mx_execute_command(char *cmd, char *command, char **parameters) {
             }
                 
             mx_pwd(&pwd_flags);
-            exit(0);
-        }
-            
-        if (!mx_strcmp("cd", command)) {
-            mx_cd(parameters[1]);
             exit(0);
         }
             
