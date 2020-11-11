@@ -17,6 +17,7 @@ extern char **environ;
 void mx_type_prompt(void);
 void mx_read_command(char *cmd, char **par);
 int mx_input(char *str, int win_len);
+void mx_execute_command(char *cmd, char *command, char **parameters, char *envp[]);
 
 //UNSET block
 int mx_unset(const char *name);
