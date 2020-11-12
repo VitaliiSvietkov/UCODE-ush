@@ -28,7 +28,7 @@ static void check_builtin (char **list, char *command, t_list **output,
                            int *flag) {
     for (int j = 0; list[j] != NULL; j++) {
         if (strcmp(list[j], command) == 0) {
-            char *str = mx_strjoin(command, ": shell built-in command");
+            char *str = mx_strjoin(command, ": ush built-in command");
             mx_push_back(&*output, str);
             free(str);
             (*flag)++;
@@ -39,7 +39,9 @@ static void check_builtin (char **list, char *command, t_list **output,
 static void print_path(t_list *output, int flag, char *command,
                        which_t which_options) {
     if (!flag){
-        printf("%s not found\n", command);
+        mx_printerr(command);
+        mx_printerr(" not found\n");
+        //printf("%s not found\n", command);
     }
     else {
         t_list *head = output;

@@ -95,6 +95,8 @@
 #define MX_BOLD_CYAN    "\x1B[1;36m"
 #define MX_BOLD_RED     "\x1B[[1;31m"
 #define MX_BOLD_BLUE    "\x1B[1;34m"
+char *prompt_colors[8];
+int prompt_color_counter;
 
 // Keyboard keys
 #define MX_INPUT_SIZE  1024
