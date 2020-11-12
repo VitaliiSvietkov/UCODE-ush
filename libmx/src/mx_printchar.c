@@ -1,7 +1,6 @@
-#include "../inc/libmx.h"
+#include "libmx.h"
 
 void mx_printchar(char c) {
-    char t[] = "0";
-    t[0] = c;
-    write(1, t, 1);
+    write( 1, &c, 1);
 }
+

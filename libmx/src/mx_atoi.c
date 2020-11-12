@@ -1,32 +1,23 @@
-#include "../inc/libmx.h"
+#include "libmx.h"
 
-int mx_atoi(const char *s) {
-	s = mx_del_extra_spaces(s);
-	int res = 0;
-	int sign = 1, counterSign = 0;
-	bool wasNumber = false;
-	for (int i = 0; s[i] != '\0'; i++) {
-		if (s[i] == '-') {
-			sign *= -1;
-			counterSign++;
-			if (counterSign >= 2 || wasNumber)
-				return 0;
-			continue;
-		}
-		if (s[i] == '+') {
-			counterSign++;
-			if (counterSign >= 2 || wasNumber)
-				return 0;
-			continue;
-		}
-		if (counterSign >= 2)
-			return 0;
-		if ((mx_isspace(s[i]) || !mx_isdigit(s[i]))
-		    && (s[i] != '-' && s[i] != '+'))
-				return 0;
-		res = res * 10 + (s[i] - '0');
-		wasNumber = true;
+int mx_atoi(const char *str) {
+	int sign;
+	int output;
+
+	sign = 1;
+	output = 0;
+	while (mx_isspace(*str))
+		str++;
+	if (*str == '-'){
+		sign = -1;
+		str++;
 	}
-	return sign * res;
+	else if (*str == '+')
+		str++;
+	while (mx_isdigit(*str)){
+		output = output * 10 + *str - '0';
+		str++;
+	}
+	return (output * sign);
 }
 

@@ -1,32 +1,36 @@
-#include "../inc/libmx.h"
+#include "libmx.h"
+
+static char* math_hex(unsigned long nbr, int len) {
+    int ost = 0;
+    char *str = NULL;
+
+    str = mx_strnew(len);
+    for (int i = 0; i < len; i++) {
+        ost = nbr % 16;
+        nbr = nbr / 16;
+        if (ost >= 0 && ost <= 9)
+            ost += 48;
+        if (ost >= 10 && ost <= 15)
+            ost += 87;
+        str[i] = ost;
+    }
+    mx_str_reverse(str);
+    return str;
+}
 
 char *mx_nbr_to_hex(unsigned long nbr) {
-	if (nbr < 0)
-		return 0;
-	unsigned long quotient = nbr;
-	int remainder, j = 0, size = 0;
-	unsigned long temp = nbr;
-	while (temp != 0) {
-		size++;
-		temp /= 16;
-	}
-	char *hexadecimal = (char *)malloc(size + 1);
-	for (int i = 0; i <= size; i++)
-		hexadecimal[i] = '\0';
-	while (quotient != 0) {
-		remainder = quotient % 16;
-		if (remainder < 10)
-			hexadecimal[j] = 48 + remainder;
-		else
-			hexadecimal[j] = 87 + remainder;
-		j++;
-		quotient /= 16;
-	}
-	j--;
-	for (int i = 0; i < j; i++, j--) {
-		char tmp = hexadecimal[i];
-		hexadecimal[i] = hexadecimal[j];
-		hexadecimal[j] = tmp;
-	}
-	return hexadecimal;
+    unsigned long num = nbr;
+    int len = 0;
+    char *str = NULL;
+
+    if (nbr == 0) {
+        str = mx_strnew(2);
+        *str = '0';
+        return str;
+    }
+    while (num != 0) {
+        num = num / 16;
+        len++;
+    }
+    return math_hex(nbr, len);
 }

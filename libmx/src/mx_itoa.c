@@ -1,42 +1,30 @@
-#include "../inc/libmx.h"
+#include "libmx.h"
+
+static char *check_zero(char *str_num) {
+    str_num = mx_strnew(1);
+    str_num[0] = '0';
+    return str_num;
+}
 
 char *mx_itoa(int number) {
-    if (number == 0) {
-        char *res = (char *)malloc(2);
-        res[0] = '0';
-        res[1] = '\0';
-        return res;
-    }
-    int len = 0;
-    int temp = number;
-    while (temp > 0) {
-        len++;
-        temp /= 10;
-    }
-    char *res;
-    int i = 0;
-    int j = 0;
+    char *str_num = NULL;
+    short size = 0;
+    long l = number;
+
     if (number < 0) {
-        res = (char *)malloc(len + 2);
-        i = 1;
-        res[0] = '-';
-        number *= -1;
-        j = 1;
+        size++;
+        l *= -1;
     }
-    else
-        res = (char *)malloc(len + 1);
-    while (number > 0) {
-        res[i] = number % 10 + '0';
-        i++;
-        number /= 10;
+    if (number == 0) 
+        return check_zero(str_num);
+    for (long a = l; a > 0; a /= 10, size++);
+    str_num = mx_strnew(size);
+    if (number < 0)
+        str_num[0] = '-';
+    for ( ; l > 0; size-- ) {
+        str_num [size - 1] = l % 10  + '0';
+        l /= 10;
     }
-    res[i] = '\0';
-    i--;
-    for (; j <= i; j++) {
-        char tmp = res[j];
-        res[j] = res[i];
-        res[i] = tmp;
-        i--;
-    }
-    return res;
+    return str_num;
 }
+
