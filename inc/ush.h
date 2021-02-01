@@ -33,6 +33,7 @@ extern char **environ;
 void mx_type_prompt(void);
 int mx_input(char *str, int win_len);
 void mx_read_command(char *cmd, char **par);
+int mx_execute_builtin(char *cmd, char *command, char **params);
 
 void mx_builtin_cd(char *path);
 
