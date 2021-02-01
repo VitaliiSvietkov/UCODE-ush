@@ -1,10 +1,19 @@
-#include "libmx.h"
+#include "../inc/libmx.h"
 
 void mx_pop_front(t_list **head) {
-    if (head && *head) {
-        t_list *temp = *head;
-        *head = temp->next;
-        free(temp);
-    }
-}
+	t_list *clone = NULL;
 
+	if (!head || !*head)
+		return;
+	if ((*head)->next == NULL) {
+		(*head)->data = NULL;
+		free(*head);
+		*head = NULL;
+	}
+	else {
+		clone = (*head)->next;
+		(*head)->data = NULL;
+		free(*head);
+		*head = clone;
+	}
+}

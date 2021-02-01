@@ -1,24 +1,28 @@
-#include "libmx.h"
+#include "../inc/libmx.h"
 
-char *mx_replace_substr(const char *str, const char *sub, const char *replace){
-    int diff;
-    char *res;
+char *mx_replace_substr(const char *str, const char *sub,
+                        const char *replace) {
+    char *arrrep = NULL;
+    int sub_len;
+    int replace_len;
+    int i = 0;
 
     if (!str || !sub || !replace)
         return NULL;
-    diff = mx_strlen(sub) - mx_strlen(replace);
-    diff = diff < 0 ? -diff : diff;
-    res = mx_strnew(mx_strlen(str) + mx_count_substr(str, sub) * diff);
-    for (int i = 0, k = 0; i < mx_strlen(str); i++) {
-        if (!mx_get_substr_index(&str[i], sub)) {
-            for (int j = 0; j < mx_strlen(replace); j++, k++)
-                res[k] = replace[j];
-            i += mx_strlen(sub) - 1;
+    sub_len = mx_strlen(sub);
+    replace_len = mx_strlen(replace);
+    i = mx_get_substr_index(str, sub);
+    arrrep = mx_strnew(mx_strlen(str) + (sub_len - replace_len) *
+    			mx_count_substr(str, sub));
+    i = 0;
+    while (*str) {
+        if (mx_strstr(str, sub) == str) {
+            mx_strcpy(&arrrep[i], replace);
+            i += sub_len;
+            str += replace_len;
         }
-        else {
-            res[k] = str[i];
-            k++;
-        }
+        else
+            arrrep[i++] = *str++;
     }
-    return res;
+    return arrrep;
 }

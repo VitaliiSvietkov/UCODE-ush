@@ -1,11 +1,8 @@
-#include "libmx.h"
+#include "../inc/libmx.h"
 
 bool mx_isalpha(int c) {
-    if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122)) {
-        return 1;
+    if ((65 <= c && c  <= 90) || (97 <= c && c <= 122)) {
+        return true;
     }
-    else {
-        return 0;
-    }
+    return false;
 }
-

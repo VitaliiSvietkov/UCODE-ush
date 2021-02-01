@@ -1,28 +1,18 @@
-#include "libmx.h"
+#include "../inc/libmx.h"
 
 unsigned long mx_hex_to_nbr(const char *hex) {
-	int len = 0;
 	unsigned long num = 0;
-	unsigned long base = 1;
+	unsigned long digit = 1;
+	int len = mx_strlen(hex);
 
-	if (hex != NULL)
-		while (hex[len])
-			len++;
-	else
-		return num;
-	for (int i = 0; i <= len; i++) {
-		if (hex[len - i] >= '0' && hex[len - i] <= '9') {
-			num = num + (hex[len - i] - 48) * base;
-			base = base * 16;
-		}
-		if (hex[len - i] >= 'A' && hex[len - i] <= 'F') {
-			num = num + (hex[len - i] - 55) * base;
-			base = base * 16;
-		}
-		if (hex[len - i] >= 'a' && hex[len - i] <= 'f') {
-			num = num + (hex[len - i] - 87) * base;
-			base = base * 16;
-		}
+	for (int i = len - 1; i >= 0; i--) {
+		if (hex[i] >= '0' && hex[i] <= '9')
+			num += (hex[i] - 48) * digit;
+		else if (hex[i] >= 'a' && hex[i] <= 'f')
+			num += (hex[i] - 87) * digit;
+		else if (hex[i] >= 'A' && hex[i] <= 'F')
+			num += (hex[i] - 55) * digit;
+		digit *= 16;
 	}
 	return num;
 }

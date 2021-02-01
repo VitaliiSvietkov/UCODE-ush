@@ -1,30 +1,31 @@
-#include "libmx.h"
-
-static char *check_zero(char *str_num) {
-    str_num = mx_strnew(1);
-    str_num[0] = '0';
-    return str_num;
-}
+#include "../inc/libmx.h"
 
 char *mx_itoa(int number) {
-    char *str_num = NULL;
-    short size = 0;
-    long l = number;
+    int length = 0;
+    char *result = NULL;
 
+    if (number == -2147483648) {
+        result = (char *) malloc(sizeof(char) * 12);
+        mx_strcpy(result, "-2147483648");
+        return result;
+    }
+    //assigning 0 value and the end of string
+    if (number == 0) {
+        result = (char *) malloc(sizeof(char) * 2);
+        mx_strcpy(result, "0");
+        return result;
+    }
+    length = mx_nbr_length(number);
+    result = (char *) malloc(sizeof(char) * length + 2);
     if (number < 0) {
-        size++;
-        l *= -1;
+        result[0] = '-';
+        number *= -1;
+        length++;
     }
-    if (number == 0) 
-        return check_zero(str_num);
-    for (long a = l; a > 0; a /= 10, size++);
-    str_num = mx_strnew(size);
-    if (number < 0)
-        str_num[0] = '-';
-    for ( ; l > 0; size-- ) {
-        str_num [size - 1] = l % 10  + '0';
-        l /= 10;
+    result[length] = '\0';
+    while (number) {
+        result[--length] = (char)((number % 10) + 48);
+        number /= 10;
     }
-    return str_num;
+    return result;
 }
-

@@ -1,27 +1,22 @@
-NAME_LIB = libmx.a
+.PHONY: all libmx uninstall clean reinstall
 
-FLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic
+SRCS := $(wildcard src/*.c)
+HDRS := $(wildcard inc/*.h)
 
-all: create_obj LIBMX create_lib
+all: libmx
 
-create_obj:
-	mkdir obj
+libmx:
+	@clang -c ${HDRS} ${SRCS}
+	@mkdir obj
+	@mv *.o obj
+	@ar -rc libmx.a obj/*.o
+	@ranlib libmx.a
 
-LIBMX:
-	clang $(FLAGS) -Iinc -c src/*.c
-	mv *.o obj/
-
-create_lib:
-	ar -rc $(NAME_LIB) obj/*.o
-	ranlib $(NAME_LIB)
+uninstall: clean
+	@rm -f libmx.a
 
 clean:
-	rm -rf obj
+	@rm -f inc/*.gch
+	@rm -rdf obj
 
-uninstall:
-	rm -rf obj
-	rm -rf $(NAME_LIB)
-
-reinstall:
-	make uninstall
-	make
+reinstall: uninstall libmx
