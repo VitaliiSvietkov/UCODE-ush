@@ -35,7 +35,19 @@ int mx_input(char *str, int win_len);
 void mx_read_command(char *cmd, char **par);
 int mx_execute_builtin(char *cmd, char *command, char **params);
 
-void mx_builtin_cd(char *path);
+// CD block
+//===============================================================
+typedef struct s_flags_cd
+{
+    bool using_s;
+    bool using_P;
+}              t_flags_cd;
+
+void mx_builtin_cd(char **params, t_flags_cd *flags);
+void mx_cd_flags_init(t_flags_cd *data);
+int mx_cd_flags_set(t_flags_cd *data, char **flags);
+//===============================================================
+
 
 // ENV block
 //===============================================================
@@ -48,7 +60,7 @@ typedef struct s_flags_env
 
 void mx_builtin_env(t_flags_env *flags, char **data);
 void mx_env_flags_init(t_flags_env *data);
-void mx_env_flags_set(t_flags_env *data, char **param);
+int mx_env_flags_set(t_flags_env *data, char **param);
 //===============================================================
 
 
@@ -62,7 +74,7 @@ typedef struct s_flags_pwd
 
 void mx_builtin_pwd(t_flags_pwd *flags);
 void mx_pwd_flags_init(t_flags_pwd *data);
-void mx_pwd_flags_set(t_flags_pwd *data, char **flags);
+int mx_pwd_flags_set(t_flags_pwd *data, char **flags);
 //===============================================================
 
 

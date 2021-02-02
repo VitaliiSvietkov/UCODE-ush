@@ -1,6 +1,6 @@
 #include "../inc/ush.h"
 
-void mx_env_flags_set(t_flags_env *data, char **param) {
+int mx_env_flags_set(t_flags_env *data, char **param) {
     for (int i = 1; param[i] != NULL; i++) {
         if (param[i][0] == '-') {
         
@@ -10,8 +10,7 @@ void mx_env_flags_set(t_flags_env *data, char **param) {
                     mx_printerr("env: invalid option -- '");
                     mx_printerr(&param[i][j]);
                     mx_printerr("'\nTry 'env --help' for more information.\n");
-                    errno = 1;
-                    return;
+                    return 1;
                 }
                 
                 if (param[i][j] == 'i') data->using_I = true;
@@ -21,4 +20,5 @@ void mx_env_flags_set(t_flags_env *data, char **param) {
             
         }
     }
+    return 0;
 }
