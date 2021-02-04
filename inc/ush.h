@@ -1,6 +1,7 @@
 #pragma once
 
 #define _POSIX_C_SOURCE 200112L //for setenv() and unsetenv()
+#define _XOPEN_SOURCE 500 // for realpath() on Linux
 #include <sys/wait.h>
 #include <sys/ioctl.h>
 #include <sys/stat.h>
@@ -29,6 +30,12 @@
 
 
 extern char **environ;
+
+struct s_global
+{
+    char *PWD;
+    char *OLDPWD;
+}      t_global;
 
 void mx_type_prompt(void);
 int mx_input(char *str, int win_len);

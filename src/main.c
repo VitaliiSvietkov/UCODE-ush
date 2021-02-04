@@ -10,6 +10,15 @@ void handle_sigint(int sig) {
 int main(void) {
     char *cmd = NULL, *command = NULL, **parameters = NULL;
     char *envp[] = { getenv("PATH"), 0 };
+
+    t_global.PWD = mx_strnew(PATH_MAX);
+    memset(t_global.PWD, '\0', PATH_MAX);
+    t_global.PWD = mx_strcpy(t_global.PWD, getenv("PWD"));
+
+    t_global.OLDPWD = mx_strnew(PATH_MAX);
+    memset(t_global.OLDPWD, '\0', PATH_MAX);
+    //t_global.OLDPWD = mx_strcpy(t_global.OLDPWD, getenv("OLDPWD"));
+
     while (true) {
         signal(SIGINT, handle_sigint);
         cmd = mx_strnew(256);
