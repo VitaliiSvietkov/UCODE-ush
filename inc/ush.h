@@ -84,6 +84,19 @@ void mx_pwd_flags_init(t_flags_pwd *data);
 int mx_pwd_flags_set(t_flags_pwd *data, char **flags);
 //===============================================================
 
+//ECHO block
+//===============================================================
+typedef struct s_flags_echo
+{
+    bool using_n;
+    bool using_e;
+    bool using_E;
+}              t_flags_echo;
+
+void mx_builtin_echo(char **params, t_flags_echo *flags);
+void mx_echo_flags_init(t_flags_echo *data);
+int mx_echo_flags_set(t_flags_echo *data, char **flags);
+//===============================================================
 
 int mx_builtin_unset(const char *name);
 int mx_unset_check_param(char **data);
