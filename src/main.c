@@ -17,7 +17,15 @@ int main(void) {
 
     t_global.OLDPWD = mx_strnew(PATH_MAX);
     memset(t_global.OLDPWD, '\0', PATH_MAX);
-    //t_global.OLDPWD = mx_strcpy(t_global.OLDPWD, getenv("OLDPWD"));
+    char *system_var = getenv("OLDPWD");
+    if (system_var != NULL)
+        t_global.OLDPWD = mx_strcpy(t_global.OLDPWD, system_var);
+
+    t_global.HOME = mx_strnew(PATH_MAX);
+    memset(t_global.HOME, '\0', PATH_MAX);
+    system_var = getenv("HOME");
+    if (system_var != NULL)
+        t_global.HOME = mx_strcpy(t_global.HOME, system_var);
 
     while (true) {
         signal(SIGINT, handle_sigint);

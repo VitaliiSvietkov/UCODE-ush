@@ -35,6 +35,7 @@ struct s_global
 {
     char *PWD;
     char *OLDPWD;
+    char *HOME;
 }      t_global;
 
 void mx_type_prompt(void);
