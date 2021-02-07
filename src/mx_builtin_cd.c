@@ -4,6 +4,19 @@ static void go_to_parent();
 static void go_to_dir(char *dir);
 static int check_lnk_path(char *path);
 
+char *mx_rep_tilda(char *str) {
+    int index = mx_get_char_index(str, '~');
+    if (index == -1)
+        return NULL;
+    char *res = malloc(PATH_MAX);
+    mx_memset(res, 0, PATH_MAX);
+    mx_memcpy(res, str, index);
+    mx_memcpy(res + index, t_global.HOME, mx_strlen(t_global.HOME));
+    mx_memcpy(res + index + mx_strlen(t_global.HOME), 
+        str + index + 1, PATH_MAX - index - 1 - mx_strlen(t_global.HOME));
+    return res;
+}
+
 void mx_builtin_cd(char **params, t_flags_cd *flags) {
     int argc = 0;
     for (; params[argc] != NULL; argc++);
@@ -38,8 +51,23 @@ void mx_builtin_cd(char **params, t_flags_cd *flags) {
         else  if (params[1][0] == '-') {
             if (t_global.OLDPWD[0] != '\0') {
                 chdir(t_global.OLDPWD);
+                setenv("OLDPWD", t_global.PWD, 1);
+                setenv("PWD", t_global.OLDPWD, 1);
+
                 mx_memcpy(t_global.PWD, t_global.OLDPWD, PATH_MAX);
-                setenv("PWD", t_global.PWD, 1);
+                mx_memset(t_global.OLDPWD, 0, PATH_MAX);
+                mx_memcpy(t_global.OLDPWD, getenv("OLDPWD"), mx_strlen(getenv("OLDPWD")));
+
+                char *test = mx_strrep(t_global.PWD, t_global.HOME, TILDA);
+                if (test != NULL) {
+                    mx_printstr(test);
+                    mx_printchar('\n');
+                    free(test);
+                }
+                else {
+                    mx_printstr(t_global.PWD);
+                    mx_printchar('\n');
+                }
             }
             return;
         }
@@ -65,35 +93,44 @@ void mx_builtin_cd(char **params, t_flags_cd *flags) {
     else
         path = mx_strdup(params[1]);
 
+    char *tilda_path = mx_rep_tilda(path);
+    if (tilda_path == NULL)
+        tilda_path = mx_strdup(path);
+
     if (flags->using_s) {
-        if (check_lnk_path(path)) {
+        if (check_lnk_path(tilda_path)) {
             mx_printerr("ush: cd: not a directory: ");
-            mx_printerr(path);
+            mx_printerr(tilda_path);
             mx_printerr("\n");
             if (path != NULL)
                 free(path);
+            free(tilda_path);
             return;
         }
         if (path != NULL)
             free(path);
+        free(tilda_path);
         return;
     }
 
     if (path != NULL && flags->using_P) {
         char *res = NULL;
-        res = realpath(path, real_buf);
-        path = mx_strdup(real_buf);
+        res = realpath(tilda_path, real_buf);
+        free(tilda_path);
+        tilda_path = mx_strdup(real_buf);
         if (!res)
             free(res);
     }
 
     int status;
-    if (path[0] == '/') {
+    if (tilda_path[0] == '/') {
         mx_memset(t_global.PWD, '\0', mx_strlen(t_global.PWD));
         t_global.PWD[0] = '/';
     }
 
-    char **arr = mx_strsplit(path, '/');
+    // Main algorithm
+    //====================================
+    char **arr = mx_strsplit(tilda_path, '/');
     for (int i = 0; arr[i] != NULL; i++) {
         if (!mx_strcmp(arr[i], ".."))
             go_to_parent();
@@ -101,6 +138,7 @@ void mx_builtin_cd(char **params, t_flags_cd *flags) {
             go_to_dir(arr[i]);
     }
     mx_del_strarr(&arr);
+    //====================================
 
     status = chdir(t_global.PWD);
     if (status < 0) {
@@ -115,9 +153,9 @@ void mx_builtin_cd(char **params, t_flags_cd *flags) {
         }
         status = setenv("PWD", t_global.PWD, 1);
     }
-
     if (path != NULL)
         free(path);
+    free(tilda_path);
 }
 
 /*

@@ -28,8 +28,11 @@
 
 #include "../libmx/inc/libmx.h"
 
+#define TILDA "~\0"
+
 
 extern char **environ;
+char *mx_strrep(char *str, char *substr, char *replace);
 
 struct s_global
 {
