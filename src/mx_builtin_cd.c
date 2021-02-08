@@ -21,6 +21,17 @@ void mx_builtin_cd(char **params, t_flags_cd *flags) {
     int argc = 0;
     for (; params[argc] != NULL; argc++);
 
+    char real_buf[PATH_MAX];
+    char *path = NULL;
+
+    char tmp_PWD[PATH_MAX];
+    mx_memcpy(tmp_PWD, t_global.PWD, PATH_MAX);
+
+    if (params[1][0] == '-' && mx_strlen(params[1]) > 1)
+        path = mx_strdup(params[2]);
+    else
+        path = mx_strdup(params[1]);
+
     switch (argc)
     {
     case 1:
@@ -33,6 +44,7 @@ void mx_builtin_cd(char **params, t_flags_cd *flags) {
             mx_memcpy(t_global.PWD, t_global.HOME, PATH_MAX);
             setenv("PWD", t_global.PWD, 1);
         }
+        free(path);
         return;
         break;
     case 2:
@@ -46,6 +58,7 @@ void mx_builtin_cd(char **params, t_flags_cd *flags) {
                 mx_memcpy(t_global.PWD, t_global.HOME, PATH_MAX);
                 setenv("PWD", t_global.PWD, 1);
             }
+            free(path);
             return;
         }
         else  if (params[1][0] == '-') {
@@ -69,29 +82,38 @@ void mx_builtin_cd(char **params, t_flags_cd *flags) {
                     mx_printchar('\n');
                 }
             }
+            free(path);
             return;
         }
         break;
     case 3:
-
+        if (params[1][0] == '-')
+            break;
+        else {
+            char *tmp = mx_strrep(t_global.PWD, params[1], params[2]);
+            if (tmp != NULL) {
+                free(path);
+                path = tmp;
+            }
+        }
         break;
     case 4:
-
+        if (params[1][0] != '-') {
+            mx_printerr("ush: cd: too many arguments\n");
+            free(path);
+            return;
+        }
+        else {
+            char *tmp = mx_strrep(t_global.PWD, params[2], params[3]);
+            if (tmp != NULL) {
+                free(path);
+                path = tmp;
+            }
+        }
         break;
     default:
         break;
-    }    
-
-    char real_buf[PATH_MAX];
-    char *path = NULL;
-
-    char tmp_PWD[PATH_MAX];
-    mx_memcpy(tmp_PWD, t_global.PWD, PATH_MAX);
-
-    if (params[1][0] == '-' && mx_strlen(params[1]) > 1)
-        path = mx_strdup(params[2]);
-    else
-        path = mx_strdup(params[1]);
+    }
 
     char *tilda_path = mx_rep_tilda(path);
     if (tilda_path == NULL)
