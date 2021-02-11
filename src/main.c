@@ -52,7 +52,7 @@ int main(void) {
         
         free(cmd);
         free(command);
-        mx_del_strarr(&parameters);
+        //mx_del_strarr(&parameters);
     }
     return 0;
 }
