@@ -1,15 +1,18 @@
 #include "../inc/ush.h"
 
-void mx_read_command(char *cmd, char **par) {
+void mx_read_command(char *cmd, char **par, char *line) {
     struct winsize max;
     ioctl(0, TIOCGWINSZ, &max);
 
-    char line[max.ws_col];
+    line = mx_strnew(max.ws_col);
     int i = 0, j = 0;
     char *array[100], *pch;
 
     //read one line
     int read = mx_input(line, max.ws_col);
+    printf("command: %s\n", line);
+    mx_replace_tilda(&line);
+    printf("command 2: %s\n", line);
     if (read > max.ws_col - 5)
             exit(1);
     if (read == 0) return;

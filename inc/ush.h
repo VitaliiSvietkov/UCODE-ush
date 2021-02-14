@@ -33,6 +33,7 @@
 
 extern char **environ;
 char *mx_strrep(char *str, char *substr, char *replace);
+void mx_replace_tilda(char **str);
 
 struct s_global
 {
@@ -43,7 +44,7 @@ struct s_global
 
 void mx_type_prompt(void);
 int mx_input(char *str, int win_len);
-void mx_read_command(char *cmd, char **par);
+void mx_read_command(char *cmd, char **par, char *line);
 int mx_execute_builtin(char *cmd, char *command, char **params);
 
 // CD block

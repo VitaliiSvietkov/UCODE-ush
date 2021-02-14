@@ -8,7 +8,7 @@ void handle_sigint(int sig) {
 }
 
 int main(void) {
-    char *cmd = NULL, *command = NULL, **parameters = NULL;
+    char *cmd = NULL, *command = NULL, **parameters = NULL, *line = NULL;
     char *envp[] = { getenv("PATH"), 0 };
 
     t_global.PWD = mx_strnew(PATH_MAX);
@@ -34,7 +34,9 @@ int main(void) {
         parameters = (char **)malloc(20);
 
         mx_type_prompt();
-        mx_read_command(command, parameters);
+        mx_read_command(command, parameters, line);
+        free(line);
+        line = NULL;
 
         if (mx_execute_builtin(cmd, command, parameters)) {
         
