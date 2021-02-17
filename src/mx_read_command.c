@@ -10,9 +10,11 @@ void mx_read_command(char *cmd, char **par, char *line) {
 
     //read one line
     int read = mx_input(line, max.ws_col);
-    printf("command: %s\n", line);
+    
+    //printf("command: %s\n", line);
     mx_replace_tilda(&line);
-    printf("command 2: %s\n", line);
+    //printf("command 2: %s\n", line);
+
     if (read > max.ws_col - 5)
             exit(1);
     if (read == 0) return;

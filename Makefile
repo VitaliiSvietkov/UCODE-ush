@@ -9,7 +9,10 @@ all: ush
 
 ush:
 	@$(MAKE) -sC libmx/
-	@clang -std=c11 $(WFLGS) $(SRCS) libmx/libmx.a -I ./inc/ush.h
+	@clang -c $(WFLGS) $(SRCS)
+	@mkdir obj
+	@mv *.o obj
+	@clang -std=c11 obj/*.o libmx/libmx.a -I ./inc/ush.h
 	@mv a.out $@
 
 clean:

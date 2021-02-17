@@ -1,7 +1,8 @@
 #include "../inc/ush.h"
 
-void mx_builtin_pwd(t_flags_pwd *flags) {
-    char *res = (char *)malloc(INT_MAX);//will be printed in the end
+int mx_builtin_pwd(t_flags_pwd *flags) {
+    char *res = (char *)malloc(INT_MAX);
+
     if (flags->using_L) {
         res = mx_strdup(t_global.PWD);
     }
@@ -13,4 +14,5 @@ void mx_builtin_pwd(t_flags_pwd *flags) {
     mx_printchar('\n');
     
     free(res);
+    return 0;
 }

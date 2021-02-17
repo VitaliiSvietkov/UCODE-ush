@@ -17,7 +17,7 @@ char *mx_rep_tilda(char *str) {
     return res;
 }
 
-void mx_builtin_cd(char **params, t_flags_cd *flags) {
+int mx_builtin_cd(char **params, t_flags_cd *flags) {
     int argc = 0;
     for (; params[argc] != NULL; argc++);
 
@@ -45,7 +45,7 @@ void mx_builtin_cd(char **params, t_flags_cd *flags) {
             setenv("PWD", t_global.PWD, 1);
         }
         free(path);
-        return;
+        return 0;
         break;
     case 2:
         if (params[1][0] == '-' && mx_strlen(params[1]) > 1) {
@@ -59,7 +59,7 @@ void mx_builtin_cd(char **params, t_flags_cd *flags) {
                 setenv("PWD", t_global.PWD, 1);
             }
             free(path);
-            return;
+            return 0;
         }
         else  if (params[1][0] == '-') {
             if (t_global.OLDPWD[0] != '\0') {
@@ -73,17 +73,17 @@ void mx_builtin_cd(char **params, t_flags_cd *flags) {
 
                 char *test = mx_strrep(t_global.PWD, t_global.HOME, TILDA);
                 if (test != NULL) {
-                    mx_printstr(test);
-                    mx_printchar('\n');
+                    //mx_printstr(test);
+                    //mx_printchar('\n');
                     free(test);
                 }
                 else {
-                    mx_printstr(t_global.PWD);
-                    mx_printchar('\n');
+                    //mx_printstr(t_global.PWD);
+                    //mx_printchar('\n');
                 }
             }
             free(path);
-            return;
+            return 0;
         }
         break;
     case 3:
@@ -101,7 +101,7 @@ void mx_builtin_cd(char **params, t_flags_cd *flags) {
         if (params[1][0] != '-') {
             mx_printerr("ush: cd: too many arguments\n");
             free(path);
-            return;
+            return 1;
         }
         else {
             char *tmp = mx_strrep(t_global.PWD, params[2], params[3]);
@@ -127,12 +127,12 @@ void mx_builtin_cd(char **params, t_flags_cd *flags) {
             if (path != NULL)
                 free(path);
             free(tilda_path);
-            return;
+            return 1;
         }
         if (path != NULL)
             free(path);
         free(tilda_path);
-        return;
+        return 0;
     }
 
     if (path != NULL && flags->using_P) {
@@ -167,6 +167,7 @@ void mx_builtin_cd(char **params, t_flags_cd *flags) {
         mx_printerr("ush: cd: ");
         perror(path);
         mx_memcpy(t_global.PWD, tmp_PWD, PATH_MAX);
+        return 1;
     }
     else {
         if (mx_strcmp(t_global.OLDPWD, tmp_PWD)) {
@@ -178,6 +179,7 @@ void mx_builtin_cd(char **params, t_flags_cd *flags) {
     if (path != NULL)
         free(path);
     free(tilda_path);
+    return 0;
 }
 
 /*

@@ -32,6 +32,8 @@
 
 
 extern char **environ;
+void mx_init_global(void);
+void mx_free_global(void);
 char *mx_strrep(char *str, char *substr, char *replace);
 void mx_replace_tilda(char **str);
 
@@ -40,6 +42,7 @@ struct s_global
     char *PWD;
     char *OLDPWD;
     char *HOME;
+    int exit_status;
 }      t_global;
 
 void mx_type_prompt(void);
@@ -55,7 +58,7 @@ typedef struct s_flags_cd
     bool using_P;
 }              t_flags_cd;
 
-void mx_builtin_cd(char **params, t_flags_cd *flags);
+int mx_builtin_cd(char **params, t_flags_cd *flags);
 void mx_cd_flags_init(t_flags_cd *data);
 int mx_cd_flags_set(t_flags_cd *data, char **flags);
 //===============================================================
@@ -84,7 +87,7 @@ typedef struct s_flags_pwd
     bool using_P; //default
 }              t_flags_pwd;
 
-void mx_builtin_pwd(t_flags_pwd *flags);
+int mx_builtin_pwd(t_flags_pwd *flags);
 void mx_pwd_flags_init(t_flags_pwd *data);
 int mx_pwd_flags_set(t_flags_pwd *data, char **flags);
 //===============================================================
