@@ -50,6 +50,14 @@ int mx_execute_builtin(char *cmd, char *command, char **params) {
             t_global.exit_status = mx_builtin_cd(params, &cd_flags);
         return 0;
     }
+    //WHICH
+    else if (!mx_strcmp("which", command)) {
+        t_flags_which which_flags;
+        mx_which_flags_init(&which_flags);
+        if (!mx_which_flags_set(&which_flags, params))
+            mx_buildin_which(&which_flags, params);
+        return 0;
+    }
 
     return -1;
 }

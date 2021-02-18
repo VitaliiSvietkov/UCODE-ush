@@ -92,6 +92,19 @@ void mx_pwd_flags_init(t_flags_pwd *data);
 int mx_pwd_flags_set(t_flags_pwd *data, char **flags);
 //===============================================================
 
+// WHICH block
+//===============================================================
+typedef struct s_flags_which
+{
+    bool using_A;
+    bool using_S;
+}              t_flags_which;
+
+void mx_buildin_which(t_flags_which *flags, char **data);
+void mx_which_flags_init(t_flags_which *data);
+int mx_which_flags_set(t_flags_which *data, char **flags);
+//===============================================================
+
 
 int mx_builtin_unset(const char *name);
 int mx_unset_check_param(char **data);
