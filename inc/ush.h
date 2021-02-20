@@ -23,7 +23,6 @@
 #include <termios.h>
 #include <term.h>
 #include <curses.h>
-//#include <malloc/malloc.h>
 #include <termios.h>
 
 #include "../libmx/inc/libmx.h"
@@ -47,8 +46,8 @@ struct s_global
 
 void mx_type_prompt(void);
 int mx_input(char *str, int win_len);
-void mx_read_command(char *cmd, char **par, char *line);
-int mx_execute_builtin(char *cmd, char *command, char **params);
+void mx_read_command(char **line);
+int mx_execute_builtin(char *command, char **params, char ***commands_arr);
 
 // CD block
 //===============================================================

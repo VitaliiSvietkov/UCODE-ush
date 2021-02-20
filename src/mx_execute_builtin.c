@@ -1,16 +1,19 @@
 #include "../inc/ush.h"
 
-int mx_execute_builtin(char *cmd, char *command, char **params) {
+int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
     // EXIT
     if (!mx_strcmp("exit", command)) {
-        free(cmd);
+        int ext_val = 0;
+        if (params[1] != NULL)
+            ext_val = mx_atoi(params[1]);
+
         free(command);
         mx_del_strarr(&params);
-        //if (params[1] != NULL)
-        //    exit(mx_atoi(params[1]));
-        //else
-            exit(0);
+        mx_del_strarr(commands_arr);
+
+        exit(ext_val);
     }
+
     // UNSET
     else if (!mx_strcmp("unset", command)) {
         if (mx_unset_check_param(params) == 0) {
@@ -26,6 +29,7 @@ int mx_execute_builtin(char *cmd, char *command, char **params) {
         }
         return 0;
     }
+
     // ENV
     else if (!mx_strcmp("env", command)) {
         t_flags_env env_flags;
@@ -34,6 +38,7 @@ int mx_execute_builtin(char *cmd, char *command, char **params) {
             mx_builtin_env(&env_flags, params);
         return 0;
     }
+
     // PWD
     else if (!mx_strcmp("pwd", command)) {
         t_flags_pwd pwd_flags;
@@ -42,6 +47,7 @@ int mx_execute_builtin(char *cmd, char *command, char **params) {
             t_global.exit_status = mx_builtin_pwd(&pwd_flags);
         return 0;
     }
+
     // CD
     else if (!mx_strcmp("cd", command)) {
         t_flags_cd cd_flags;
@@ -50,6 +56,7 @@ int mx_execute_builtin(char *cmd, char *command, char **params) {
             t_global.exit_status = mx_builtin_cd(params, &cd_flags);
         return 0;
     }
+    
     //WHICH
     else if (!mx_strcmp("which", command)) {
         t_flags_which which_flags;
