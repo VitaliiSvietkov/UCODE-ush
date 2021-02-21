@@ -2,10 +2,28 @@
 
 //Handler for SIGINT, caused by
 //Ctrl-C at keyboard
-void handle_sigint(int sig) {
-    //printf("HELLO %d\n", sig);
-    kill(getpid(), sig);
+void handle_ctrl_c(int sig) {
+    t_jobs *node = jobs;
+    while (node->next != NULL)
+        node = node->next;
+    int pid = node->pid;
+    if (pid == getpid())
+        mx_free_global();
+
+    printf("\nMY CTRL-C\n");
+
+    kill(pid, sig);
 }
+
+void handle_ctrl_z(int sig) {
+    printf(" Pressed CTRL-Z %d", sig);
+}
+
+/*
+void handle_ctrl_d(int sig) {
+    close(stdin);
+}
+*/
 
 int main(int argc, char *argv[]) {
     if (argv[argc]) {}
@@ -16,7 +34,8 @@ int main(int argc, char *argv[]) {
     mx_init_global();
 
     while (true) {
-        signal(SIGINT, handle_sigint);
+        signal(SIGINT, handle_ctrl_c);
+        signal(SIGTSTP, handle_ctrl_z);
 
         mx_type_prompt();
         mx_read_command(&line);
@@ -46,13 +65,17 @@ int main(int argc, char *argv[]) {
                         exit(1);
                 }
                 else {
+                    t_jobs *new_process = jobs_new_node(child_pid);
+                    jobs_push_back(&jobs, &new_process);
                     int child_status = 0;
                     waitpid(child_pid, &child_status, WUNTRACED);
                     t_global.exit_status = WEXITSTATUS(child_status);
+                    jobs_remove(&jobs, child_pid);
+                    wait(NULL);
                 }
                 
             }
-            printf("Value of $?: %d\n", t_global.exit_status);
+            //printf("Value of $?: %d\n", t_global.exit_status);
             free(command);
             mx_del_strarr(&parameters);
 

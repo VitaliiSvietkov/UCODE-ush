@@ -16,10 +16,13 @@ void mx_init_global(void) {
     system_var = getenv("HOME");
     if (system_var != NULL)
         t_global.HOME = mx_strcpy(t_global.HOME, system_var);
+
+    jobs = jobs_new_node(getpid());
 }
 
 void mx_free_global(void) {
     free(t_global.PWD);
     free(t_global.OLDPWD);
     free(t_global.HOME);
+    jobs_clear(&jobs);
 }

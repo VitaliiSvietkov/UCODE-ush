@@ -44,6 +44,18 @@ struct s_global
     int exit_status;
 }      t_global;
 
+typedef struct s_jobs
+{
+    int pid;
+    struct s_jobs *next;
+    struct s_jobs *prev;
+}      t_jobs;
+t_jobs *jobs;
+t_jobs *jobs_new_node(int pid);
+void jobs_clear(t_jobs **head);
+void jobs_push_back(t_jobs **list, t_jobs **data);
+int jobs_remove(t_jobs **head, int pid);
+
 void mx_type_prompt(void);
 int mx_input(char *str, int win_len);
 void mx_read_command(char **line);
