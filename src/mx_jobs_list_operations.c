@@ -3,6 +3,7 @@
 t_jobs *jobs_new_node(int pid) {
     t_jobs *res = (t_jobs *)malloc(sizeof(t_jobs));
     res->pid = pid;
+    res->job_id = 0;
     res->next = NULL;
     res->prev = NULL;
     return res;

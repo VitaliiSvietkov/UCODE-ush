@@ -47,6 +47,7 @@ struct s_global
 typedef struct s_jobs
 {
     int pid;
+    int job_id;
     struct s_jobs *next;
     struct s_jobs *prev;
 }      t_jobs;

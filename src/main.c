@@ -19,8 +19,12 @@ void handle_ctrl_c(int sig) {
 
 void handle_ctrl_z(int sig) {
     t_jobs *node = jobs;
-    while (node->next != NULL)
+    int job_id = 0;
+    while (node->next != NULL) {
+        if (node->job_id > job_id)
+            job_id = node->job_id;
         node = node->next;
+    }
     int pid = node->pid;
 
     printf("\nPressed CTRL-Z %d for %d where parent: %d\n", sig, pid, jobs->pid);
@@ -29,6 +33,9 @@ void handle_ctrl_z(int sig) {
         return;
     
     kill(pid, sig);
+    job_id++;
+    node->job_id = job_id;
+    printf("[%d]+  Stopped\t\t\t%s\n", job_id, "command info");
     //kill(jobs->pid, SIGCHLD);
     return;
 }

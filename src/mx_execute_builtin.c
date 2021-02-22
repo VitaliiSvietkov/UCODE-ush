@@ -57,7 +57,7 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
         return 0;
     }
     
-    //WHICH
+    // WHICH
     else if (!mx_strcmp("which", command)) {
         t_flags_which which_flags;
         mx_which_flags_init(&which_flags);
@@ -66,7 +66,7 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
         return 0;
     }
 
-    //ECHO
+    // ECHO
     else if (!mx_strcmp("echo", command)) {
         t_flags_echo echo_flags;
         mx_echo_flags_init(&echo_flags);
@@ -75,5 +75,29 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
         return 0;
     }
 
+    // fg
+    else if (!mx_strcmp("fg", command)) {
+        if (params[1] == NULL)
+            return 0;
+        
+        t_jobs *node = jobs;
+        while (node != NULL && node->job_id != mx_atoi(params[1])) 
+            node = node->next;
+        
+        if (node == NULL) {
+            mx_printerr("ush: fg: no such job\n");
+            t_global.exit_status = 1;
+            return 0;
+        }
+
+        kill(node->pid, SIGCONT);
+        int child_status = 0;
+        waitpid(node->pid, &child_status, WUNTRACED);
+        t_global.exit_status = WEXITSTATUS(child_status);
+        if (!WIFSTOPPED(child_status))
+            jobs_remove(&jobs, node->pid);
+        t_global.exit_status = 0;
+        return 0;
+    }
     return -1;
 }
