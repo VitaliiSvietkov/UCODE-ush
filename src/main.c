@@ -7,16 +7,30 @@ void handle_ctrl_c(int sig) {
     while (node->next != NULL)
         node = node->next;
     int pid = node->pid;
-    if (pid == getpid())
-        mx_free_global();
 
     printf("\nMY CTRL-C\n");
 
-    kill(pid, sig);
+    if (pid == jobs->pid) {
+        mx_free_global();
+        exit(130);
+    }
+    else kill(pid, sig);
 }
 
 void handle_ctrl_z(int sig) {
-    printf(" Pressed CTRL-Z %d", sig);
+    t_jobs *node = jobs;
+    while (node->next != NULL)
+        node = node->next;
+    int pid = node->pid;
+
+    printf("\nPressed CTRL-Z %d for %d where parent: %d\n", sig, pid, jobs->pid);
+
+    if (pid == jobs->pid)
+        return;
+    
+    kill(pid, sig);
+    //kill(jobs->pid, SIGCHLD);
+    return;
 }
 
 /*
@@ -52,17 +66,27 @@ int main(int argc, char *argv[]) {
                 
                 int child_pid = fork();
                 if (child_pid == 0) {
-                    int exec_status = 0;
-                    /* char *cmd = mx_strnew(256);
-                    mx_strcpy(cmd, "/bin/");
-                    mx_strcat(cmd, command); */
-                    char *cmd = mx_strjoin("/bin/", command);
-                    exec_status = execve(cmd, parameters, envp); //execute command
-                    free(cmd);
-                    if (exec_status != -1)
-                        exit(0);
-                    else 
-                        exit(1);
+                    char **path_dir = mx_strsplit(getenv("PATH"), ':');
+
+                    for (int i = 0; path_dir[i] != NULL; i++) {
+                        int exec_status = 0;
+                        char *cmd = NULL;
+                        if (command[0] != '/') {
+                            cmd = mx_strjoin(path_dir[i], "/");
+                            cmd = mx_strjoin(cmd, command);
+                        }
+                        else 
+                            cmd = mx_strdup(command);
+                        exec_status = execve(cmd, parameters, envp); //execute command
+                        free(cmd);
+                        if (exec_status != -1) {
+                            mx_del_strarr(&path_dir);
+                            exit(0);
+                        }
+                    }
+
+                    mx_del_strarr(&path_dir);
+                    exit(1);
                 }
                 else {
                     t_jobs *new_process = jobs_new_node(child_pid);
@@ -70,8 +94,9 @@ int main(int argc, char *argv[]) {
                     int child_status = 0;
                     waitpid(child_pid, &child_status, WUNTRACED);
                     t_global.exit_status = WEXITSTATUS(child_status);
-                    jobs_remove(&jobs, child_pid);
-                    wait(NULL);
+                    if (!WIFSTOPPED(child_status))
+                        jobs_remove(&jobs, child_pid);
+                    //wait(NULL);
                 }
                 
             }
