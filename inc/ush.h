@@ -116,6 +116,19 @@ void mx_which_flags_init(t_flags_which *data);
 int mx_which_flags_set(t_flags_which *data, char **flags);
 //===============================================================
 
+// ECHO block
+//===============================================================
+typedef struct s_flags_echo
+{
+    bool using_N;
+    bool using_e;
+    bool using_E;
+}              t_flags_echo;
+
+void mx_buildin_echo(t_flags_echo *flags, char **data);
+void mx_echo_flags_init(t_flags_echo *data);
+int mx_echo_flags_set(t_flags_echo *data, char **flags);
+//===============================================================
 
 int mx_builtin_unset(const char *name);
 int mx_unset_check_param(char **data);

@@ -66,5 +66,14 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
         return 0;
     }
 
+    //ECHO
+    else if (!mx_strcmp("echo", command)) {
+        t_flags_echo echo_flags;
+        mx_echo_flags_init(&echo_flags);
+        if (!mx_echo_flags_set(&echo_flags, params))
+            mx_buildin_echo(&echo_flags, params);
+        return 0;
+    }
+
     return -1;
 }
