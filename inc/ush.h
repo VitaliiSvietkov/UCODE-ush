@@ -1,5 +1,5 @@
 #pragma once
-
+#define _GNU_SOURCE
 #define _POSIX_C_SOURCE 200112L //for setenv() and unsetenv()
 #define _XOPEN_SOURCE 500 // for realpath() on Linux
 #include <sys/wait.h>
