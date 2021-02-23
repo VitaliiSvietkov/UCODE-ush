@@ -92,6 +92,9 @@ int main(int argc, char *argv[]) {
                         }
                     }
 
+                    mx_printerr("ush: command not found: ");
+                    mx_printerr(command);
+                    mx_printerr("\n");
                     mx_del_strarr(&path_dir);
                     exit(1);
                 }
