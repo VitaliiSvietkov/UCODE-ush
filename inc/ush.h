@@ -48,11 +48,12 @@ typedef struct s_jobs
 {
     int pid;
     int job_id;
+    char *cmd;
     struct s_jobs *next;
     struct s_jobs *prev;
 }      t_jobs;
 t_jobs *jobs;
-t_jobs *jobs_new_node(int pid);
+t_jobs *jobs_new_node(int pid, char *cmd);
 void jobs_clear(t_jobs **head);
 void jobs_push_back(t_jobs **list, t_jobs **data);
 int jobs_remove(t_jobs **head, int pid);

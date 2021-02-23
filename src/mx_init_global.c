@@ -17,7 +17,7 @@ void mx_init_global(void) {
     if (system_var != NULL)
         t_global.HOME = mx_strcpy(t_global.HOME, system_var);
 
-    jobs = jobs_new_node(getpid());
+    jobs = jobs_new_node(getpid(), "ush");
 }
 
 void mx_free_global(void) {

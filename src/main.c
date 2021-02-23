@@ -35,7 +35,7 @@ void handle_ctrl_z(int sig) {
     kill(pid, sig);
     job_id++;
     node->job_id = job_id;
-    printf("[%d]+  Stopped\t\t\t%s\n", job_id, "command info");
+    printf("[%d]  Stopped\t\t\t%s\n", job_id, node->cmd);
     //kill(jobs->pid, SIGCHLD);
     return;
 }
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
                     exit(1);
                 }
                 else {
-                    t_jobs *new_process = jobs_new_node(child_pid);
+                    t_jobs *new_process = jobs_new_node(child_pid, commands_arr[i]);
                     jobs_push_back(&jobs, &new_process);
                     int child_status = 0;
                     waitpid(child_pid, &child_status, WUNTRACED);

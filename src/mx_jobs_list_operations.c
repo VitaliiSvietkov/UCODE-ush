@@ -1,9 +1,10 @@
 #include "../inc/ush.h"
 
-t_jobs *jobs_new_node(int pid) {
+t_jobs *jobs_new_node(int pid, char *cmd) {
     t_jobs *res = (t_jobs *)malloc(sizeof(t_jobs));
     res->pid = pid;
     res->job_id = 0;
+    res->cmd = mx_strdup(cmd);
     res->next = NULL;
     res->prev = NULL;
     return res;
@@ -15,6 +16,7 @@ void jobs_clear(t_jobs **head) {
         t_jobs *tmp = ptr->next;
         if (ptr->pid != getpid())
             kill(ptr->pid, SIGINT);
+        free(ptr->cmd);
         free(ptr);
         ptr = tmp;
     }
@@ -47,6 +49,7 @@ int jobs_remove(t_jobs **head, int pid) {
     t_jobs *tmp = NULL;
     if (node->next != NULL)
         tmp = node->next->next;
+    free(node->next->cmd);
     free(node->next);
     node->next = tmp;
     if (tmp != NULL)
