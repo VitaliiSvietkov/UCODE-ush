@@ -19,5 +19,44 @@ void mx_apply_escapes(char ***arr) {
             i--;
         }
     }
+
+    // Loop for other escapes
+    for (int i = 0; data[i] != NULL; i++) {
+        //int len = mx_strlen(data[i]);
+
+        char *ptr = mx_strchr(data[i], '\\');
+        while ( ptr != NULL ) {
+            switch (*(ptr + 1))
+            {
+            case 'n':
+                *ptr = '\n';
+                break;
+            case 't':
+                *ptr = '\t';
+                break;
+            case '\\':
+                *ptr = '\\';
+                break;
+            case '\'':
+                *ptr = '\'';
+                break;
+            case '\"':
+                *ptr = '\"';
+                break;
+            default:
+                break;
+            }
+            
+            ptr++;
+            *ptr = '\0';
+            for (; *(ptr + 1) != '\0';) {
+                mx_swap_char(ptr, ptr + 1);
+                ptr++;
+            }
+
+            ptr = mx_strchr(data[i], '\\');
+        }
+
+    }
     //mx_print_strarr(data, "\n");
 }
