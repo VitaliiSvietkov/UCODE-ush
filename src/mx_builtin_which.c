@@ -1,6 +1,6 @@
 #include "../inc/ush.h"
 
-void mx_buildin_which(t_flags_which *flags, char **data) {
+void mx_builtin_which(t_flags_which *flags, char **data) {
     if (flags->using_A) {
         DIR *d;
         struct dirent *dir;

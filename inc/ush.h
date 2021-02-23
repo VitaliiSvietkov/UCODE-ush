@@ -35,6 +35,7 @@ void mx_init_global(void);
 void mx_free_global(void);
 char *mx_strrep(char *str, char *substr, char *replace);
 void mx_replace_tilda(char **str);
+void mx_command_substitution(char ***arr);
 void mx_apply_escapes(char ***arr);
 
 struct s_global
@@ -114,7 +115,7 @@ typedef struct s_flags_which
     bool using_S;
 }              t_flags_which;
 
-void mx_buildin_which(t_flags_which *flags, char **data);
+void mx_builtin_which(t_flags_which *flags, char **data);
 void mx_which_flags_init(t_flags_which *data);
 int mx_which_flags_set(t_flags_which *data, char **flags);
 //===============================================================
@@ -128,7 +129,7 @@ typedef struct s_flags_echo
     bool using_E;
 }              t_flags_echo;
 
-void mx_buildin_echo(t_flags_echo *flags, char **data);
+void mx_builtin_echo(t_flags_echo *flags, char **data);
 void mx_echo_flags_init(t_flags_echo *data);
 int mx_echo_flags_set(t_flags_echo *data, char **flags);
 //===============================================================

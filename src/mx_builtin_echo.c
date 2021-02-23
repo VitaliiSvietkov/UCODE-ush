@@ -1,6 +1,6 @@
 #include "../inc/ush.h"
 
-void mx_buildin_echo(t_flags_echo *flags, char **data) {
+void mx_builtin_echo(t_flags_echo *flags, char **data) {
     if (data[1] != NULL) {
         int i = 1;
         char *str = NULL;

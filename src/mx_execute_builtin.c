@@ -62,7 +62,7 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
         t_flags_which which_flags;
         mx_which_flags_init(&which_flags);
         if (!mx_which_flags_set(&which_flags, params))
-            mx_buildin_which(&which_flags, params);
+            mx_builtin_which(&which_flags, params);
         return 0;
     }
 
@@ -71,7 +71,7 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
         t_flags_echo echo_flags;
         mx_echo_flags_init(&echo_flags);
         if (!mx_echo_flags_set(&echo_flags, params))
-            mx_buildin_echo(&echo_flags, params);
+            mx_builtin_echo(&echo_flags, params);
         return 0;
     }
 
@@ -96,7 +96,11 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
         t_global.exit_status = WEXITSTATUS(child_status);
         if (!WIFSTOPPED(child_status))
             jobs_remove(&jobs, node->pid);
-        t_global.exit_status = 0;
+            
+        if (WIFSIGNALED(child_status))
+            t_global.exit_status = 130;
+        else
+            t_global.exit_status = 0;
         return 0;
     }
     return -1;

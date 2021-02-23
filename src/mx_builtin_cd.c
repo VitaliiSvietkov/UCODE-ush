@@ -27,10 +27,12 @@ int mx_builtin_cd(char **params, t_flags_cd *flags) {
     char tmp_PWD[PATH_MAX];
     mx_memcpy(tmp_PWD, t_global.PWD, PATH_MAX);
 
-    if (params[1][0] == '-' && mx_strlen(params[1]) > 1)
-        path = mx_strdup(params[2]);
-    else
-        path = mx_strdup(params[1]);
+    if (argc > 1) {
+        if (params[1][0] == '-' && mx_strlen(params[1]) > 1)
+            path = mx_strdup(params[2]);
+        else
+            path = mx_strdup(params[1]);
+    }
 
     switch (argc)
     {

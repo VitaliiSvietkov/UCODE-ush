@@ -1,14 +1,12 @@
 #include "../inc/ush.h"
 
-//Handler for SIGINT, caused by
-//Ctrl-C at keyboard
 void handle_ctrl_c(int sig) {
     t_jobs *node = jobs;
     while (node->next != NULL)
         node = node->next;
     int pid = node->pid;
 
-    printf("\nMY CTRL-C\n");
+    printf("\n");
 
     if (pid == jobs->pid) {
         mx_free_global();
@@ -36,21 +34,14 @@ void handle_ctrl_z(int sig) {
     job_id++;
     node->job_id = job_id;
     printf("[%d]  Stopped\t\t\t%s\n", job_id, node->cmd);
-    //kill(jobs->pid, SIGCHLD);
     return;
 }
-
-/*
-void handle_ctrl_d(int sig) {
-    close(stdin);
-}
-*/
 
 int main(int argc, char *argv[]) {
     if (argv[argc]) {}
 
     char *command = NULL, **parameters = NULL, *line = NULL;
-    char *envp[] = { getenv("PATH"), 0 };
+    //char *envp[] = { getenv("PATH"), 0 };
 
     mx_init_global();
 
@@ -69,6 +60,7 @@ int main(int argc, char *argv[]) {
         for (int i = 0; commands_arr[i] != NULL; ++i) {
             parameters = mx_strsplit(commands_arr[i], ' ');
             mx_apply_escapes(&parameters);
+            mx_command_substitution(&parameters);
             command = mx_strdup(parameters[0]);
 
             if (mx_execute_builtin(command, parameters, &commands_arr)) {
@@ -86,7 +78,7 @@ int main(int argc, char *argv[]) {
                         }
                         else 
                             cmd = mx_strdup(command);
-                        exec_status = execve(cmd, parameters, envp); //execute command
+                        exec_status = execve(cmd, parameters, environ); //execute command
                         free(cmd);
                         if (exec_status != -1) {
                             mx_del_strarr(&path_dir);
@@ -108,6 +100,11 @@ int main(int argc, char *argv[]) {
                     t_global.exit_status = WEXITSTATUS(child_status);
                     if (!WIFSTOPPED(child_status))
                         jobs_remove(&jobs, child_pid);
+                    else
+                        t_global.exit_status = 147;
+                    
+                    if (WIFSIGNALED(child_status))
+                        t_global.exit_status = 130;
                     //wait(NULL);
                 }
                 
