@@ -57,8 +57,9 @@ int main(int argc, char *argv[]) {
     while (true) {
         signal(SIGINT, handle_ctrl_c);
         signal(SIGTSTP, handle_ctrl_z);
-
-        mx_type_prompt();
+        
+        if (isatty(fileno(stdin)))
+            mx_type_prompt();
         mx_read_command(&line);
 
         char **commands_arr = mx_strsplit(line, ';');
@@ -117,6 +118,8 @@ int main(int argc, char *argv[]) {
 
         }
         mx_del_strarr(&commands_arr);
+        if (!isatty(fileno(stdin)))
+            break;
     }
 
     mx_free_global();

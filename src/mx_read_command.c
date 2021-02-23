@@ -7,7 +7,7 @@ void mx_read_command(char **line) {
     *line = mx_strnew(max.ws_col);
 
     //read one line
-    int read = mx_input(*line, max.ws_col);
+    int read = mx_input(line, max.ws_col);
     
     mx_replace_tilda(line);
 

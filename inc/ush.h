@@ -60,7 +60,7 @@ void jobs_push_back(t_jobs **list, t_jobs **data);
 int jobs_remove(t_jobs **head, int pid);
 
 void mx_type_prompt(void);
-int mx_input(char *str, int win_len);
+int mx_input(char **str, int win_len);
 void mx_read_command(char **line);
 int mx_execute_builtin(char *command, char **params, char ***commands_arr);
 
