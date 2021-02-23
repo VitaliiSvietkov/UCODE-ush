@@ -11,7 +11,11 @@ void mx_read_command(char **line) {
     
     mx_replace_tilda(line);
 
-    if (read > max.ws_col - 5)
-            exit(1);
+    if (read > max.ws_col - 5) {
+        mx_printerr("ush: too long input\n");
+        free(*line);
+        *line = mx_strdup("\n");
+        return;
+    }
     if (read == 0) return;
 }

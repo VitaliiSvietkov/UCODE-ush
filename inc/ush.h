@@ -35,6 +35,7 @@ void mx_init_global(void);
 void mx_free_global(void);
 char *mx_strrep(char *str, char *substr, char *replace);
 void mx_replace_tilda(char **str);
+void mx_apply_escapes(char ***arr);
 
 struct s_global
 {

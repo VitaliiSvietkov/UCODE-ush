@@ -67,6 +67,7 @@ int main(int argc, char *argv[]) {
 
         for (int i = 0; commands_arr[i] != NULL; ++i) {
             parameters = mx_strsplit(commands_arr[i], ' ');
+            mx_apply_escapes(&parameters);
             command = mx_strdup(parameters[0]);
 
             if (mx_execute_builtin(command, parameters, &commands_arr)) {
