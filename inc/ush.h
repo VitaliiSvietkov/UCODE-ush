@@ -38,6 +38,7 @@ char *mx_strrep(char *str, char *substr, char *replace);
 void mx_replace_tilda(char **str);
 int mx_command_substitution(char ***arr);
 void mx_apply_escapes(char ***arr);
+void mx_create_process(char *command, char **parameters, char *cmd);
 
 struct s_global
 {
@@ -130,7 +131,7 @@ typedef struct s_flags_echo
     bool using_E;
 }              t_flags_echo;
 
-void mx_builtin_echo(t_flags_echo *flags, char **data);
+int mx_builtin_echo(t_flags_echo *flags, char **data);
 void mx_echo_flags_init(t_flags_echo *data);
 int mx_echo_flags_set(t_flags_echo *data, char **flags);
 //===============================================================

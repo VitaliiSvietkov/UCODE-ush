@@ -46,6 +46,9 @@ void mx_apply_escapes(char ***arr) {
             case '`':
                 *ptr = '`';
                 break;
+            case 'a':
+                *ptr = '\a';
+                break;
             default:
                 break;
             }
