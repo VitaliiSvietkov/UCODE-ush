@@ -123,7 +123,7 @@ int mx_builtin_cd(char **params, t_flags_cd *flags) {
 
     if (flags->using_s) {
         if (check_lnk_path(tilda_path)) {
-            mx_printerr("ush: cd: not a directory: ");
+            mx_printerr("cd: not a directory: ");
             mx_printerr(tilda_path);
             mx_printerr("\n");
             if (path != NULL)

@@ -34,14 +34,14 @@ int mx_builtin_echo(t_flags_echo *flags, char **data) {
                 count++;
             }
         }
-        if(count == 2) {
+        if(count == 2 || count == 0) {
             char *newstr = trim(str);
             mx_printstr(newstr);
+            mx_printchar('\n');
         }
         else {
-            mx_printerr("Odd number of quotes");
+            mx_printerr("Odd number of quotes.\n");
         }
-        mx_printchar('\n');
     }
     if(flags->using_N) {
         int i = 2;
@@ -66,12 +66,12 @@ int mx_builtin_echo(t_flags_echo *flags, char **data) {
                 count++;
             }
         }
-        if(count == 2) {
+        if(count == 2 || count == 0) {
             char *newstr = trim(str);
             mx_printstr(newstr);
         }
         else {
-            mx_printerr("Odd number of quotes");
+            mx_printerr("Odd number of quotes.\n");
         }
     }
     return 0;

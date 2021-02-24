@@ -46,6 +46,7 @@ struct s_global
     char *OLDPWD;
     char *HOME;
     int exit_status;
+    char *PATH;
 }      t_global;
 
 typedef struct s_jobs
@@ -90,7 +91,7 @@ typedef struct s_flags_env
     bool using_P;
 }              t_flags_env;
 
-void mx_builtin_env(t_flags_env *flags, char **data);
+int mx_builtin_env(t_flags_env *flags, char **data);
 void mx_env_flags_init(t_flags_env *data);
 int mx_env_flags_set(t_flags_env *data, char **param);
 //===============================================================

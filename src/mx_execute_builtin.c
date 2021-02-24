@@ -35,7 +35,7 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
         t_flags_env env_flags;
         mx_env_flags_init(&env_flags);
         if (!mx_env_flags_set(&env_flags, params))
-            mx_builtin_env(&env_flags, params);
+            t_global.exit_status = mx_builtin_env(&env_flags, params);
         return 0;
     }
 
