@@ -58,7 +58,8 @@ int main(void) {
         for (int i = 0; commands_arr[i] != NULL; ++i) {
             parameters = mx_strsplit(commands_arr[i], ' ');
             mx_apply_escapes(&parameters);
-            mx_command_substitution(&parameters);
+            if (mx_command_substitution(&parameters) == -1)
+                continue;
             command = mx_strdup(parameters[0]);
 
             if (mx_execute_builtin(command, parameters, &commands_arr)) {
