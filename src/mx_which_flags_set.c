@@ -9,11 +9,11 @@ int mx_which_flags_set(t_flags_which *data, char **flags) {
                 {
                 case 'a':
                     data->using_A = true;
-                    data->using_S = false;
+                    //data->using_S = false;
                     break;
                 case 's':
                     data->using_S = true;
-                    data->using_A = false;
+                    //data->using_A = false;
                     break;
                 default:
                     mx_printerr("Illegal option -");
