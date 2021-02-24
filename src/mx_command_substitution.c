@@ -2,7 +2,7 @@
 
 static char *rep_substr(char *str, char *substr, char *new_str);
 
-void mx_command_substitution(char ***arr) {
+int mx_command_substitution(char ***arr) {
     char **data = *arr;
 
     for (int i = 0; data[i] != NULL; i++) {
@@ -12,8 +12,80 @@ void mx_command_substitution(char ***arr) {
         
         char *tmp_ptr = ptr;
 
-        if (*(ptr + 1) == '(') {}
-        else if (*(ptr + 1) == '{') {}
+        if (*(ptr + 1) == '(') {
+            *ptr = '\0';
+            for (; *(tmp_ptr + 1) != '\0';) {
+                mx_swap_char(tmp_ptr, tmp_ptr + 1);
+                tmp_ptr++;
+            }
+            *ptr = '\0';
+            tmp_ptr = ptr;
+            for (; *(tmp_ptr + 1) != '\0';) {
+                mx_swap_char(tmp_ptr, tmp_ptr + 1);
+                tmp_ptr++;
+            }
+
+            tmp_ptr = ptr;
+            char *var = mx_strnew(64);
+            for (int j = 0; *tmp_ptr != ')'; j++) {
+                if (*tmp_ptr == ' ' || *tmp_ptr == '\0') {
+                    mx_printerr("ush: command not found: ");
+                    mx_printerr(var);
+                    mx_printerr("\n");
+                    free(var);
+                    t_global.exit_status = 1;
+                    return -1;
+                }
+                var[j] = *tmp_ptr;
+                tmp_ptr++;
+            }
+            *tmp_ptr = '\0';
+            for (; *(tmp_ptr + 1) != '\0';) {
+                mx_swap_char(tmp_ptr, tmp_ptr + 1);
+                tmp_ptr++;
+            }
+            char *env = getenv(var);
+            if (env == NULL)
+                env= "\0";
+            data[i] = mx_strrep(data[i], var, env);
+            free(var);
+        }
+        else if (*(ptr + 1) == '{') {
+            *ptr = '\0';
+            for (; *(tmp_ptr + 1) != '\0';) {
+                mx_swap_char(tmp_ptr, tmp_ptr + 1);
+                tmp_ptr++;
+            }
+            *ptr = '\0';
+            tmp_ptr = ptr;
+            for (; *(tmp_ptr + 1) != '\0';) {
+                mx_swap_char(tmp_ptr, tmp_ptr + 1);
+                tmp_ptr++;
+            }
+
+            tmp_ptr = ptr;
+            char *var = mx_strnew(64);
+            for (int j = 0; *tmp_ptr != '}'; j++) {
+                if (*tmp_ptr == ' ' || *tmp_ptr == '\0') {
+                    mx_printerr("ush: bad substitution\n");
+                    free(var);
+                    t_global.exit_status = 1;
+                    return -1;
+                }
+                var[j] = *tmp_ptr;
+                tmp_ptr++;
+            }
+            *tmp_ptr = '\0';
+            for (; *(tmp_ptr + 1) != '\0';) {
+                mx_swap_char(tmp_ptr, tmp_ptr + 1);
+                tmp_ptr++;
+            }
+            char *env = getenv(var);
+            if (env == NULL)
+                env= "\0";
+            data[i] = mx_strrep(data[i], var, env);
+            free(var);
+        }
         else {
             *ptr = '\0';
             for (; *(tmp_ptr + 1) != '\0';) {
@@ -34,11 +106,14 @@ void mx_command_substitution(char ***arr) {
                 var[j] = *tmp_ptr;
                 tmp_ptr++;
             }
-            data[i] = mx_strrep(data[i], var, getenv(var));
+            char *env = getenv(var);
+            if (env == NULL)
+                env= "\0";
+            data[i] = mx_strrep(data[i], var, env);
             free(var);
         }
     }
-
+    return 0;
 }
 
 static char *rep_substr(char *str, char *substr, char *new_str) {

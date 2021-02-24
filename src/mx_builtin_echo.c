@@ -10,7 +10,7 @@ char *trim (char *s)
     //printf ("%s\n", s);
 }
 
-void mx_builtin_echo(t_flags_echo *flags, char **data) {
+int mx_builtin_echo(t_flags_echo *flags, char **data) {
     if (data[1] != NULL) {
         int i = 1;
         char *str = NULL;
@@ -74,4 +74,5 @@ void mx_builtin_echo(t_flags_echo *flags, char **data) {
             mx_printerr("Odd number of quotes");
         }
     }
+    return 0;
 }

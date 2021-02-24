@@ -166,8 +166,15 @@ int mx_builtin_cd(char **params, t_flags_cd *flags) {
 
     status = chdir(t_global.PWD);
     if (status < 0) {
-        mx_printerr("ush: cd: ");
-        perror(path);
+        mx_printerr("cd: ");
+        char *err_tmp = mx_strdup(strerror(errno));
+        if (err_tmp[0] < 97)    
+            err_tmp[0] += 32;
+        mx_printerr(err_tmp);
+        free(err_tmp);
+        mx_printerr(": ");
+        mx_printerr(path);
+        mx_printerr("\n");
         mx_memcpy(t_global.PWD, tmp_PWD, PATH_MAX);
         return 1;
     }
@@ -246,8 +253,15 @@ static int check_lnk_path(char *path) {
 
     int status = chdir(t_global.PWD);
     if (status < 0) {
-        mx_printerr("ush: cd: ");
-        perror(path);
+        mx_printerr("cd: ");
+        char *err_tmp = mx_strdup(strerror(errno));
+        if (err_tmp[0] < 97)    
+            err_tmp[0] += 32;
+        mx_printerr(err_tmp);
+        free(err_tmp);
+        mx_printerr(": ");
+        mx_printerr(path);
+        mx_printerr("\n");
         mx_memcpy(t_global.PWD, tmp_lnk_PWD, PATH_MAX);
     }
     else {

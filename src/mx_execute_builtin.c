@@ -71,7 +71,7 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
         t_flags_echo echo_flags;
         mx_echo_flags_init(&echo_flags);
         if (!mx_echo_flags_set(&echo_flags, params))
-            mx_builtin_echo(&echo_flags, params);
+            t_global.exit_status = mx_builtin_echo(&echo_flags, params);
         return 0;
     }
 
@@ -103,5 +103,29 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
             t_global.exit_status = 0;
         return 0;
     }
+
+    // EXPORT
+    else if (!mx_strcmp("export", command)) {
+        if (params[1] == NULL) {
+            t_flags_env env_flags;
+            mx_env_flags_init(&env_flags);
+            mx_builtin_env(&env_flags, params);
+            t_global.exit_status = 0;
+            return 0;
+        }
+
+        for (int i = 1; params[i] != NULL; i++) {
+            char *ptr = mx_strchr(params[i], '=');
+            if (ptr == NULL)
+                continue;
+            
+            char **arr = mx_strsplit(params[i], '=');
+            setenv(arr[0], arr[1], 1);
+            mx_del_strarr(&arr);
+        }
+        t_global.exit_status = 0;
+        return 0;
+    }
+
     return -1;
 }
