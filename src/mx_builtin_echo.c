@@ -1,5 +1,15 @@
 #include "../inc/ush.h"
 
+char *trim (char *s)
+{
+    int i;
+    while (mx_isspace (*s)) s++;   // skip left side white spaces
+    for (i = strlen (s) - 1; (mx_isspace (s[i])); i--) ;   // skip right side white spaces
+    s[i + 1] = '\0';
+    return s;
+    //printf ("%s\n", s);
+}
+
 void mx_builtin_echo(t_flags_echo *flags, char **data) {
     if (data[1] != NULL) {
         int i = 1;
@@ -17,7 +27,13 @@ void mx_builtin_echo(t_flags_echo *flags, char **data) {
             }
             i++;
         }
-        mx_printstr(str);
+        for (int i = 0; str[i]; i++) {
+            if (str[i] == '"' || str[i] == '\'') {
+                str[i] = ' ';
+            }
+        }
+        char *newstr = trim(str);
+        mx_printstr(newstr);
         mx_printchar('\n');
     }
     if(flags->using_N) {
@@ -36,6 +52,12 @@ void mx_builtin_echo(t_flags_echo *flags, char **data) {
             }
             i++;
         }
-        mx_printstr(str);
+        for (int i = 0; str[i]; i++) {
+            if (str[i] == '"') {
+                str[i] = ' ';
+            }
+        }
+        char *newstr = trim(str);
+        mx_printstr(newstr);
     }
 }
