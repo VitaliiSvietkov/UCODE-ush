@@ -40,8 +40,11 @@ void mx_apply_escapes(char ***arr) {
             case '\'':
                 *ptr = '\'';
                 break;
-            case '\"':
-                *ptr = '\"';
+            case '"':
+                *ptr = '"';
+                break;
+            case '`':
+                *ptr = '`';
                 break;
             default:
                 break;

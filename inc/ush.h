@@ -1,11 +1,12 @@
 #pragma once
 #define _GNU_SOURCE
-#define _POSIX_C_SOURCE 200112L //for setenv() and unsetenv()
+#define _POSIX_C_SOURCE 200809L //for setenv() and unsetenv()
 #define _XOPEN_SOURCE 500 // for realpath() on Linux
 #include <sys/wait.h>
 #include <sys/ioctl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/dir.h>
 #include <signal.h>
 #include <dirent.h>
 #include <fcntl.h>
@@ -115,7 +116,7 @@ typedef struct s_flags_which
     bool using_S;
 }              t_flags_which;
 
-void mx_builtin_which(t_flags_which *flags, char **data);
+int mx_builtin_which(t_flags_which *flags, char **data);
 void mx_which_flags_init(t_flags_which *data);
 int mx_which_flags_set(t_flags_which *data, char **flags);
 //===============================================================
