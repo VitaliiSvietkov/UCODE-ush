@@ -27,13 +27,20 @@ void mx_builtin_echo(t_flags_echo *flags, char **data) {
             }
             i++;
         }
+        int count = 0;
         for (int i = 0; str[i]; i++) {
             if (str[i] == '"' || str[i] == '\'') {
                 str[i] = ' ';
+                count++;
             }
         }
-        char *newstr = trim(str);
-        mx_printstr(newstr);
+        if(count == 2) {
+            char *newstr = trim(str);
+            mx_printstr(newstr);
+        }
+        else {
+            mx_printerr("Odd number of quotes");
+        }
         mx_printchar('\n');
     }
     if(flags->using_N) {
@@ -52,12 +59,19 @@ void mx_builtin_echo(t_flags_echo *flags, char **data) {
             }
             i++;
         }
+        int count = 0;
         for (int i = 0; str[i]; i++) {
-            if (str[i] == '"') {
+            if (str[i] == '"' || str[i] == '\'') {
                 str[i] = ' ';
+                count++;
             }
         }
-        char *newstr = trim(str);
-        mx_printstr(newstr);
+        if(count == 2) {
+            char *newstr = trim(str);
+            mx_printstr(newstr);
+        }
+        else {
+            mx_printerr("Odd number of quotes");
+        }
     }
 }
