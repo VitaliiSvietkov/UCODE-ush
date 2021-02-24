@@ -37,9 +37,7 @@ void handle_ctrl_z(int sig) {
     return;
 }
 
-int main(int argc, char *argv[]) {
-    if (argv[argc]) {}
-
+int main(void) {
     char *command = NULL, **parameters = NULL, *line = NULL;
     //char *envp[] = { getenv("PATH"), 0 };
 
@@ -67,6 +65,12 @@ int main(int argc, char *argv[]) {
                 
                 int child_pid = fork();
                 if (child_pid == 0) {
+                    if (getenv("PATH") == NULL) {
+                        mx_printerr("ush: command not found: ");
+                        mx_printerr(command);
+                        mx_printerr("\n");
+                        exit(1);
+                    }
                     char **path_dir = mx_strsplit(getenv("PATH"), ':');
 
                     for (int i = 0; path_dir[i] != NULL; i++) {

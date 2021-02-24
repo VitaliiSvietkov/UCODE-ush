@@ -62,7 +62,7 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
         t_flags_which which_flags;
         mx_which_flags_init(&which_flags);
         if (!mx_which_flags_set(&which_flags, params))
-            mx_builtin_which(&which_flags, params);
+            t_global.exit_status = mx_builtin_which(&which_flags, params);
         return 0;
     }
 
