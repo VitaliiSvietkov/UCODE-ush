@@ -24,7 +24,7 @@ int main(void) {
             if (mx_command_substitution(&commands_arr[i]) == -1)
                 continue;
             parameters = mx_strsplit(commands_arr[i], ' ');
-            mx_apply_escapes(&parameters);
+            //mx_apply_escapes(&parameters);
             command = mx_strdup(parameters[0]);
 
             if (mx_execute_builtin(command, parameters, &commands_arr))

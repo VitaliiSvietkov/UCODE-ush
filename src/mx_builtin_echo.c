@@ -84,6 +84,11 @@ int mx_builtin_echo(t_flags_echo *flags, char **data) {
                 str[i] = ' ';
                 count++;
             }
+            else if (str[i] == '\\') {
+                for (int j = i; str[j]; j++) {
+                    str[j] = str[j+1];
+                }
+            }
         }
         if(count % 2 == 0 || count == 0) { 
             if (isWrite) {
