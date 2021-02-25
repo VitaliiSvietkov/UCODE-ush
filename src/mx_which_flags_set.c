@@ -9,18 +9,15 @@ int mx_which_flags_set(t_flags_which *data, char **flags) {
                 {
                 case 'a':
                     data->using_A = true;
-                    //data->using_S = false;
                     break;
                 case 's':
                     data->using_S = true;
-                    //data->using_A = false;
                     break;
                 default:
-                    mx_printerr("Illegal option -");
+                    mx_printerr("which: bad option: -");
                     char c = flags[1][i];
                     mx_printerr(&c);
                     mx_printerr("\n");
-                    mx_printerr("Usage: /usr/bin/which [-as] args\n");
                     return 1;
                     break;
                 }

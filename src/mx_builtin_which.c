@@ -17,34 +17,27 @@ int mx_builtin_which(t_flags_which *flags, char **data) {
         while (data[i] != NULL) {
             for (int z = 0; z < 8; z++) {
                 if (!mx_strcmp(builtins[z], data[i])) {
-                    if (!flags->using_S) {
-                        mx_printstr(data[i]);
-                        mx_printstr(": shell built-in command\n");
-                    }
+                    mx_printstr(data[i]);
+                    mx_printstr(": ush built-in command\n");
                     found = true;
                     break;
                 }
             }
             if (!mx_strcmp(data[i], "export")) {
-                if (!flags->using_S)
-                    mx_printstr("export: shell reserved word\n");
+                mx_printstr("export: ush reserved word\n");
                 found = true;
             }
 
             if (data[i][0] == '/') {
                 lstat(data[i], &sb);
                 if (sb.st_mode & S_IXUSR) {
-                    if (!flags->using_S) {
-                        mx_printstr(data[i]);
-                        mx_printchar('\n');
-                    }
+                    mx_printstr(data[i]);
+                    mx_printchar('\n');
                     found = true;
                 }
                 else {
-                    if (!flags->using_S) {
-                        mx_printstr(data[i]);
-                        mx_printstr(" not found\n");
-                    }
+                    mx_printstr(data[i]);
+                    mx_printstr(" not found\n");
                     i++;
                     found = true;
                     here = false;
@@ -57,15 +50,13 @@ int mx_builtin_which(t_flags_which *flags, char **data) {
                 if (d != NULL) {
                     while ((dir = readdir(d)) != NULL) {
                         if (!mx_strcmp(dir->d_name, data[i])) {
-                            if (!flags->using_S) {
-                                name = mx_strnew(256);
-                                mx_strcpy(name, path_dir[j]);
-                                name = mx_strcat(name, "/");
-                                name = mx_strcat(name, data[i]);
-                                mx_printstr(name);
-                                mx_printchar('\n');
-                                free(name);
-                            }
+                            name = mx_strnew(256);
+                            mx_strcpy(name, path_dir[j]);
+                            name = mx_strcat(name, "/");
+                            name = mx_strcat(name, data[i]);
+                            mx_printstr(name);
+                            mx_printchar('\n');
+                            free(name);
                             found = true;
                             break;
                         }       
@@ -75,10 +66,8 @@ int mx_builtin_which(t_flags_which *flags, char **data) {
             }
             if (found == false) {
                 here = false;
-                if (!flags->using_S) {
-                    mx_printstr(data[i]);
-                    mx_printstr(" not found\n");
-                }
+                mx_printstr(data[i]);
+                mx_printstr(" not found\n");
             }
             i++;
         }
@@ -88,69 +77,14 @@ int mx_builtin_which(t_flags_which *flags, char **data) {
             return 1;
         return 0;
     }
-    else if (flags->using_S) {
-        int i = 2;
-        char **path_dir = mx_strsplit(getenv("PATH"), ':');
-        int built = 0;
-
-        while (data[i] != NULL) {
-            for (int z = 0; z < 8; z++) {
-                if (!mx_strcmp(builtins[z], data[i])) {
-                    found = true;
-                    built = 1;
-                    i++;
-                    break;
-                }
-            }
-            if (built) {
-                built = 0;
-                continue;
-            }
-            if (!mx_strcmp(data[i], "export")) {
-                found = true;
-                i++;
-                continue;
-            }
-
-            if (data[i][0] == '/') {
-                lstat(data[i], &sb);
-                if (sb.st_mode & S_IXUSR) {
-                    i++;
-                    found = true;
-                    continue;
-                }
-                else {
-                    i++;
-                    found = true;
-                    here = false;
-                    continue;
-                }
-            }
-
-            for (int j = 0; path_dir[j] != NULL; j++) {
-                d = opendir(path_dir[j]);
-                if (d != NULL) {
-                    while ((dir = readdir(d)) != NULL) {
-                        if (!mx_strcmp(dir->d_name, data[i])) {
-                            found = true;
-                            break;
-                        }       
-                    }
-                    closedir(d);
-                }
-            }
-            if (found == false)
-                here = false;
-            i++;
-        }
-
-        mx_del_strarr(&path_dir);
-        if (here == false)
-            return 1;
-        return 0;
-    }
     else if (data[1] != NULL) {
         int i = 1;
+        if (flags->using_S)
+            i = 2;
+        
+        if (data[i] == NULL)
+            return 1;
+            
         char *name = NULL;
         char **path_dir = mx_strsplit(getenv("PATH"), ':');
 
@@ -159,7 +93,7 @@ int mx_builtin_which(t_flags_which *flags, char **data) {
             for (int z = 0; z < 8; z++) {
                 if (!mx_strcmp(builtins[z], data[i])) {
                     mx_printstr(data[i]);
-                    mx_printstr(": shell built-in command\n");
+                    mx_printstr(": ush built-in command\n");
                     found = true;
                     built = 1;
                     i++;
@@ -168,10 +102,11 @@ int mx_builtin_which(t_flags_which *flags, char **data) {
             }
             if (built) {
                 built = 0;
+                found = false;
                 continue;
             }
             if (!mx_strcmp(data[i], "export")) {
-                mx_printstr("export: shell reserved word\n");
+                mx_printstr("export: ush reserved word\n");
                 found = true;
                 i++;
                 continue;
@@ -221,6 +156,7 @@ int mx_builtin_which(t_flags_which *flags, char **data) {
                 mx_printstr(data[i]);
                 mx_printstr(" not found\n");
             }
+            found = false;
             i++;
         }
         mx_del_strarr(&path_dir);
