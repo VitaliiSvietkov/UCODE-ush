@@ -18,6 +18,7 @@ char *mx_rep_tilda(char *str) {
 }
 
 int mx_builtin_cd(char **params, t_flags_cd *flags) {
+    mx_apply_escapes(&params);
     int argc = 0;
     for (; params[argc] != NULL; argc++);
 

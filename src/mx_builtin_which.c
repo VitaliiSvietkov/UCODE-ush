@@ -1,6 +1,7 @@
 #include "../inc/ush.h"
 
 int mx_builtin_which(t_flags_which *flags, char **data) {
+    mx_apply_escapes(&data);
     DIR *d;
     struct dirent *dir;
     struct stat sb;

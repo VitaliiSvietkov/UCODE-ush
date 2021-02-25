@@ -1,6 +1,7 @@
 #include "../inc/ush.h"
 
 int mx_builtin_env(t_flags_env *flags, char **data) {
+    mx_apply_escapes(&data);
     if (data[1] == NULL) { //print all variables
         int i = 1;
         char *s = *environ;
