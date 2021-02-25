@@ -39,23 +39,26 @@ int mx_command_substitution(char **str) {
                 tmp_ptr++;
             }
 
+            if (getenv(var) != NULL)
+                *str = mx_strrep(*str, var, getenv(var));
             /*
-            FILE *fp;
-            char *strrep = mx_strnew(INT_MAX);
-            char *command = get_exe_command(var);
-            fp = popen(command, "r");
-            if (fp == NULL) {
-                mx_printerr("Failed to run command\n");
-                return 1;
+            else {
+                FILE *fp;
+                char *strrep = mx_strnew(INT_MAX);
+                char *command = get_exe_command(var);
+                fp = popen(command, "r");
+                if (fp == NULL) {
+                    mx_printerr("Failed to run command\n");
+                    return 1;
+                }
+                fgets(strrep, sizeof(strrep), fp);
+                pclose(fp);
+                
+                *str = mx_strrep(*str, var, strrep);
+                free(strrep);
             }
-            fgets(strrep, sizeof(strrep), fp);
-            pclose(fp);
-            
-            data[i] = mx_strrep(data[i], var, strrep);
-            free(strrep);
             */
-
-            printf("%s\n", var);
+            data = *str;
             free(var);
         }
         else if (*(ptr + 1) == '{') {
