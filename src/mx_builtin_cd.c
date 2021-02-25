@@ -97,6 +97,12 @@ int mx_builtin_cd(char **params, t_flags_cd *flags) {
                 free(path);
                 path = tmp;
             }
+            else {
+                mx_printerr("cd: string not in pwd: ");
+                mx_printerr(params[1]);
+                mx_printerr("\n");
+                return 1;
+            }
         }
         break;
     case 4:
@@ -110,6 +116,12 @@ int mx_builtin_cd(char **params, t_flags_cd *flags) {
             if (tmp != NULL) {
                 free(path);
                 path = tmp;
+            }
+            else {
+                mx_printerr("cd: string not in pwd: ");
+                mx_printerr(params[1]);
+                mx_printerr("\n");
+                return 1;
             }
         }
         break;

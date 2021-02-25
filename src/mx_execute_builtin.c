@@ -35,7 +35,9 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
         t_flags_env env_flags;
         mx_env_flags_init(&env_flags);
         if (!mx_env_flags_set(&env_flags, params))
-            t_global.exit_status = mx_builtin_env(&env_flags, params);
+            mx_builtin_env(&env_flags, params);
+        else
+            t_global.exit_status = 1;
         return 0;
     }
 
@@ -45,6 +47,8 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
         mx_pwd_flags_init(&pwd_flags);
         if (!mx_pwd_flags_set(&pwd_flags, params))
             t_global.exit_status = mx_builtin_pwd(&pwd_flags);
+        else
+            t_global.exit_status = 1;
         return 0;
     }
 
@@ -54,6 +58,8 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
         mx_cd_flags_init(&cd_flags);
         if (!mx_cd_flags_set(&cd_flags, params))
             t_global.exit_status = mx_builtin_cd(params, &cd_flags);
+        else
+            t_global.exit_status = 1;
         return 0;
     }
     
@@ -63,6 +69,8 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
         mx_which_flags_init(&which_flags);
         if (!mx_which_flags_set(&which_flags, params))
             t_global.exit_status = mx_builtin_which(&which_flags, params);
+        else
+            t_global.exit_status = 1;
         return 0;
     }
 
@@ -72,6 +80,8 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr) {
         mx_echo_flags_init(&echo_flags);
         if (!mx_echo_flags_set(&echo_flags, params))
             t_global.exit_status = mx_builtin_echo(&echo_flags, params);
+        else
+            t_global.exit_status = 1;
         return 0;
     }
 

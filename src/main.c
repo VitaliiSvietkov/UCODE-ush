@@ -21,17 +21,15 @@ int main(void) {
         line = NULL;
 
         for (int i = 0; commands_arr[i] != NULL; ++i) {
+            if (mx_command_substitution(&commands_arr[i]) == -1)
+                continue;
             parameters = mx_strsplit(commands_arr[i], ' ');
             mx_apply_escapes(&parameters);
-            if (mx_command_substitution(&parameters) == -1)
-                continue;
             command = mx_strdup(parameters[0]);
 
-            if (mx_execute_builtin(command, parameters, &commands_arr)) {
-
+            if (mx_execute_builtin(command, parameters, &commands_arr))
                 mx_create_process(command, parameters, commands_arr[i]);
-                
-            }
+
             free(command);
             mx_del_strarr(&parameters);
 
