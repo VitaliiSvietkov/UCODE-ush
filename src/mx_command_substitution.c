@@ -1,7 +1,7 @@
 #include "../inc/ush.h"
 
 static char *rep_substr(char *str, char *substr, char *new_str);
-//static char *get_exe_command(char *line);
+static char *get_exe_command(char *line);
 
 int mx_command_substitution(char **str) {
     char *data = *str;
@@ -29,10 +29,12 @@ int mx_command_substitution(char **str) {
 
             tmp_ptr = ptr;
             char *var = mx_strnew(PATH_MAX);
-            for (int j = 0; *tmp_ptr != ')' && *tmp_ptr != '\0'; j++) {
+            int j = 0;
+            for (; *tmp_ptr != ')' && *tmp_ptr != '\0'; j++) {
                 var[j] = *tmp_ptr;
                 tmp_ptr++;
             }
+            var[j] = '\0';
             *tmp_ptr = '\0';
             for (; *(tmp_ptr + 1) != '\0';) {
                 mx_swap_char(tmp_ptr, tmp_ptr + 1);
@@ -41,23 +43,27 @@ int mx_command_substitution(char **str) {
 
             if (getenv(var) != NULL)
                 *str = mx_strrep(*str, var, getenv(var));
-            /*
             else {
-                FILE *fp;
-                char *strrep = mx_strnew(INT_MAX);
-                char *command = get_exe_command(var);
-                fp = popen(command, "r");
-                if (fp == NULL) {
-                    mx_printerr("Failed to run command\n");
-                    return 1;
+                char **arr = mx_strsplit(var, ';');
+                for (int i = 0; arr[i] != NULL; i++) {
+                    char *command = get_exe_command(var);
+                    FILE *fp;
+                    char *strrep = mx_strnew(PATH_MAX);
+                    fp = popen(command, "r");
+                    if (fp == NULL) {
+                        mx_printerr("Failed to run command\n");
+                        return 1;
+                    }
+                    fgets(strrep, PATH_MAX, fp);
+                    strrep[mx_strlen(strrep) - 1] = '\0';
+                    pclose(fp);
+                    
+                    *str = mx_strrep(*str, var, strrep);
+                    free(strrep);
+                    free(command);
                 }
-                fgets(strrep, sizeof(strrep), fp);
-                pclose(fp);
-                
-                *str = mx_strrep(*str, var, strrep);
-                free(strrep);
+                mx_del_strarr(&arr);
             }
-            */
             data = *str;
             free(var);
         }
@@ -145,9 +151,35 @@ static char *rep_substr(char *str, char *substr, char *new_str) {
     return res;
 }
 
-/*
 static char *get_exe_command(char *line) {
-    if (line) {}
-    return line;
+    char **arr = mx_strsplit(line, ' ');
+
+    char *res = mx_strnew(PATH_MAX);
+    char **path_dir = mx_strsplit(getenv("PATH"), ':');
+
+    struct stat sb;
+    for (int i = 0; path_dir[i] != NULL; i++) {
+        char *cmd = NULL;
+        if (arr[0][0] != '/') {
+            cmd = mx_strdup(path_dir[i]);
+            cmd = mx_strjoin(cmd, "/");
+            cmd = mx_strjoin(cmd, arr[0]);
+        }
+        else 
+            cmd = mx_strdup(arr[0]);
+        if (lstat(cmd, &sb) != -1) {
+            res = mx_strjoin(res, cmd);
+            free(cmd);
+            res = mx_strjoin(res, line + mx_strlen(arr[0]));
+            mx_del_strarr(&path_dir);
+            return res;
+        }
+
+        if (cmd != NULL) {
+            free(cmd);
+            cmd = NULL;
+        }
+    }
+    
+    return res;
 }
-*/
