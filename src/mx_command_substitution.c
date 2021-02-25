@@ -6,7 +6,73 @@ static char *get_exe_command(char *line);
 int mx_command_substitution(char **str) {
     char *data = *str;
 
-    char *ptr = mx_strchr(data, '$');
+    char *ptr = mx_strchr(data, '`');
+    if (ptr) {
+        while (ptr != NULL) {
+            char *tmp_ptr = ptr;
+
+            *ptr = '\0';
+            for (; *(tmp_ptr + 1) != '\0';) {
+                mx_swap_char(tmp_ptr, tmp_ptr + 1);
+                tmp_ptr++;
+            }
+
+            tmp_ptr = ptr;
+            char *var = mx_strnew(PATH_MAX);
+            int j = 0;
+            for (; *tmp_ptr != '`' && *tmp_ptr != '\0'; j++) {
+                var[j] = *tmp_ptr;
+                tmp_ptr++;
+            }
+            var[j] = '\0';
+            *tmp_ptr = '\0';
+            for (; *(tmp_ptr + 1) != '\0';) {
+                mx_swap_char(tmp_ptr, tmp_ptr + 1);
+                tmp_ptr++;
+            }
+
+            char *var2 = mx_strdup(var);
+
+            for (char *tmp = var; *tmp != '\0' && *tmp != ' '; tmp++) {
+                char c = *tmp;
+                if (c < 97) {
+                    c += 32;
+                    *tmp = c;
+                }
+            }
+
+            char **arr = mx_strsplit(var, ';');
+            for (int i = 0; arr[i] != NULL; i++) {
+                char *command = get_exe_command(var);
+                FILE *fp;
+                char *strrep = mx_strnew(PATH_MAX);
+                fp = popen(command, "r");
+                if (fp == NULL) {
+                    mx_printerr("Failed to run command\n");
+                    return 1;
+                }
+                char *strrep_ptr = strrep;
+                while (fgets(strrep_ptr, PATH_MAX, fp) != NULL) {
+                    strrep_ptr = strrep + mx_strlen(strrep);
+                    strrep[mx_strlen(strrep) - 1] = ' ';
+                }
+                strrep[mx_strlen(strrep) - 1] = '\0';
+                pclose(fp);
+                
+                *str = mx_strrep(*str, var2, strrep);
+                free(strrep);
+                free(command);
+            }
+            free(var2);
+            mx_del_strarr(&arr);
+
+            data = *str;
+            free(var);
+            ptr = mx_strchr(data, '`');
+        }
+    }
+
+    ptr = mx_strchr(data, '$');
     if (!ptr)
         return 0;
     
@@ -41,29 +107,45 @@ int mx_command_substitution(char **str) {
                 tmp_ptr++;
             }
 
-            if (getenv(var) != NULL)
-                *str = mx_strrep(*str, var, getenv(var));
-            else {
-                char **arr = mx_strsplit(var, ';');
-                for (int i = 0; arr[i] != NULL; i++) {
-                    char *command = get_exe_command(var);
-                    FILE *fp;
-                    char *strrep = mx_strnew(PATH_MAX);
-                    fp = popen(command, "r");
-                    if (fp == NULL) {
-                        mx_printerr("Failed to run command\n");
-                        return 1;
-                    }
-                    fgets(strrep, PATH_MAX, fp);
-                    strrep[mx_strlen(strrep) - 1] = '\0';
-                    pclose(fp);
-                    
-                    *str = mx_strrep(*str, var, strrep);
-                    free(strrep);
-                    free(command);
+            char *var2 = mx_strdup(var);
+            for (char *tmp = var; *tmp != '\0' && *tmp != ' '; tmp++) {
+                char c = *tmp;
+                if (c < 97) {
+                    c += 32;
+                    *tmp = c;
                 }
-                mx_del_strarr(&arr);
             }
+
+            char **arr = mx_strsplit(var, ';');
+            for (int i = 0; arr[i] != NULL; i++) {
+                char *command = get_exe_command(var);
+                if (mx_strlen(command) == 0) {
+                    mx_printerr("ush: command not found: ");
+                    mx_printerr(var2);
+                    mx_printerr("\n");
+                }
+                FILE *fp;
+                char *strrep = mx_strnew(PATH_MAX);
+                fp = popen(command, "r");
+                if (fp == NULL) {
+                    mx_printerr("Failed to run command\n");
+                    return 1;
+                }
+                char *strrep_ptr = strrep;
+                while (fgets(strrep_ptr, PATH_MAX, fp) != NULL) {
+                    strrep_ptr = strrep + mx_strlen(strrep);
+                    strrep[mx_strlen(strrep) - 1] = ' ';
+                }
+                strrep[mx_strlen(strrep) - 1] = '\0';
+                pclose(fp);
+                
+                *str = mx_strrep(*str, var2, strrep);
+                free(strrep);
+                free(command);
+            }
+            free(var2);
+            mx_del_strarr(&arr);
+
             data = *str;
             free(var);
         }
@@ -131,7 +213,6 @@ int mx_command_substitution(char **str) {
             data = *str;
             free(var);
         }
-
         ptr = mx_strchr(data, '$');
     }
     return 0;

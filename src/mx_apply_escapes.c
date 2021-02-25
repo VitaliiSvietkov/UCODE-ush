@@ -41,7 +41,7 @@ void mx_apply_escapes(char ***arr) {
                 *ptr = '\'';
                 break;
             case '"':
-                *ptr = '"';
+                *ptr = '\"';
                 break;
             case '`':
                 *ptr = '`';
