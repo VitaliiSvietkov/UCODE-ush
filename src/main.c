@@ -16,13 +16,16 @@ int main(void) {
             mx_type_prompt();
         mx_read_command(&line);
 
+        if (mx_command_substitution(&line) == -1) {
+            free(line);
+            line = NULL;
+            continue;
+        }
         char **commands_arr = mx_strsplit(line, ';');
         free(line);
         line = NULL;
 
         for (int i = 0; commands_arr[i] != NULL; ++i) {
-            if (mx_command_substitution(&commands_arr[i]) == -1)
-                continue;
             parameters = mx_strsplit(commands_arr[i], ' ');
             command = mx_strdup(parameters[0]);
 

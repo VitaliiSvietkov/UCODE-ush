@@ -39,6 +39,7 @@ void mx_replace_tilda(char **str);
 int mx_command_substitution(char **str);
 void mx_apply_escapes(char ***arr);
 void mx_create_process(char *command, char **parameters, char *cmd);
+char *rep_substr(char *str, char *substr, char *new_str);
 
 struct s_global
 {

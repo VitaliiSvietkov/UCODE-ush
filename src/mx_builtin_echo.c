@@ -140,5 +140,7 @@ int mx_builtin_echo(t_flags_echo *flags, char **data) {
             mx_printerr("Odd number of quotes.\n");
         }
     }
+    else 
+        mx_printchar('\n');
     return 0;
 }
