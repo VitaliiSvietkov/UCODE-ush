@@ -17,13 +17,10 @@ int mx_builtin_env(t_flags_env *flags, char **data) {
             int child_pid = fork();
             if (child_pid == 0) {
                 
-                char *s = *environ;
-                for (int i = 1; s; i++) {
-                    s = NULL;
-                    s = *(environ + i);
-                }
+                environ = NULL;
                 
                 if (data[2] != NULL) {
+                    mx_print_strarr(data + 2, "\n");
                     char **path_dir = mx_strsplit(t_global.PATH, ':');
 
                     for (int i = 0; path_dir[i] != NULL; i++) {
@@ -49,6 +46,7 @@ int mx_builtin_env(t_flags_env *flags, char **data) {
                     mx_del_strarr(&path_dir);
                     exit(1);
                 }
+                exit(0);
             }
             else {
                 t_jobs *new_process = jobs_new_node(child_pid, data[3]);

@@ -1,5 +1,6 @@
 #pragma once
 #define _GNU_SOURCE
+#define _SVID_SOURCE
 #define _POSIX_C_SOURCE 200809L //for setenv() and unsetenv()
 #define _XOPEN_SOURCE 500 // for realpath() on Linux
 #include <sys/wait.h>
@@ -67,7 +68,7 @@ int jobs_remove(t_jobs **head, int pid);
 void mx_type_prompt(void);
 int mx_input(char **str, int win_len);
 void mx_read_command(char **line);
-int mx_execute_builtin(char *command, char **params, char ***commands_arr);
+int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i);
 
 // CD block
 //===============================================================
@@ -133,7 +134,7 @@ typedef struct s_flags_echo
     bool using_E;
 }              t_flags_echo;
 
-int mx_builtin_echo(t_flags_echo *flags, char **data);
+int mx_builtin_echo(t_flags_echo *flags, char **str);
 void mx_echo_flags_init(t_flags_echo *data);
 int mx_echo_flags_set(t_flags_echo *data, char **flags);
 //===============================================================

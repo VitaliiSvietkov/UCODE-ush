@@ -1,5 +1,6 @@
 #include "../inc/ush.h"
 
+static void apply_escapes(char **str);
 static char *trim (char *s)
 {
     int i;
@@ -30,7 +31,27 @@ static char *removeSpaces(char *str)
     return str;
 }
 
-int mx_builtin_echo(t_flags_echo *flags, char **data) {
+int mx_builtin_echo(t_flags_echo *flags, char **str) {
+    /*// Loop SPACE
+    for (int i = 0; data[i] != NULL; i++) {
+        int len = mx_strlen(data[i]);
+        if (data[i][len - 1] == '\\') {
+            data[i][len - 1] = ' ';
+            data[i] = mx_strjoin(data[i], data[i + 1]);
+            free(data[i + 1]);
+            data[i + 1] = NULL;
+            for (int j = i + 1; data[j + 1] != NULL; j++) {
+                char *tmp = data[j];
+                data[j] = data[j + 1];
+                data[j + 1] = tmp;
+            }
+            i--;
+        }
+    }*/
+
+    apply_escapes(str);
+
+    char **data = mx_strsplit(*str, ' ');
     if(flags->using_N) {
         bool isWrite = true;
         int i = 2;
@@ -83,6 +104,8 @@ int mx_builtin_echo(t_flags_echo *flags, char **data) {
         }
         else {
             mx_printerr("Odd number of quotes.\n");
+            mx_del_strarr(&data);
+            return 1;
         }
     }
     else if (data[1] != NULL) {
@@ -138,9 +161,106 @@ int mx_builtin_echo(t_flags_echo *flags, char **data) {
         }
         else {
             mx_printerr("Odd number of quotes.\n");
+            mx_del_strarr(&data);
+            return 1;
         }
     }
     else 
         mx_printchar('\n');
+
+    mx_del_strarr(&data);
     return 0;
+}
+
+static void apply_escapes(char **str) {
+    char *ptr = mx_strchr(*str, '"');
+    if (ptr != NULL) {
+        char *slash_ptr = mx_strchr(ptr, '\\');
+        while ( slash_ptr != NULL ) {
+            switch (*(slash_ptr + 1))
+            {
+            case 'n':
+                *slash_ptr = '\n';
+                break;
+            case 't':
+                *slash_ptr = '\t';
+                break;
+            case '\\':
+                *slash_ptr = '\\';
+                break;
+            case '\'':
+                *slash_ptr = '\'';
+                break;
+            case '"':
+                *slash_ptr = '\"';
+                break;
+            case '`':
+                *slash_ptr = '`';
+                break;
+            case 'a':
+                *slash_ptr = '\a';
+                break;
+            default:
+                break;
+            }
+            
+            slash_ptr++;
+            *slash_ptr = '\0';
+            for (; *(slash_ptr + 1) != '\0';) {
+                mx_swap_char(slash_ptr, slash_ptr + 1);
+                slash_ptr++;
+            }
+
+            if (mx_get_char_index(slash_ptr, '\\') > mx_get_char_index(slash_ptr, '"') || mx_get_char_index(slash_ptr, '\\') == -1) {
+                ptr = mx_strchr(slash_ptr, '\'');
+                break;
+            }
+            slash_ptr = mx_strchr(ptr, '\\');
+        }
+    }
+    else
+        ptr = mx_strchr(*str, '\'');
+
+    if (ptr != NULL) {
+        char *slash_ptr = mx_strchr(ptr, '\\');
+        while ( slash_ptr != NULL ) {
+            switch (*(slash_ptr + 1))
+            {
+            case 'n':
+                *slash_ptr = '\n';
+                break;
+            case 't':
+                *slash_ptr = '\t';
+                break;
+            case '\\':
+                *slash_ptr = '\\';
+                break;
+            case '\'':
+                *slash_ptr = '\'';
+                break;
+            case '"':
+                *slash_ptr = '\"';
+                break;
+            case '`':
+                *slash_ptr = '`';
+                break;
+            case 'a':
+                *slash_ptr = '\a';
+                break;
+            default:
+                break;
+            }
+            
+            slash_ptr++;
+            *slash_ptr = '\0';
+            for (; *(slash_ptr + 1) != '\0';) {
+                mx_swap_char(slash_ptr, slash_ptr + 1);
+                slash_ptr++;
+            }
+
+            if (mx_get_char_index(slash_ptr, '\\') > mx_get_char_index(slash_ptr, '\'') || mx_get_char_index(slash_ptr, '\\') == -1)
+                break;
+            slash_ptr = mx_strchr(ptr, '\\');
+        }
+    }
 }
