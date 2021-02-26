@@ -29,8 +29,10 @@ int main(void) {
             parameters = mx_strsplit(commands_arr[i], ' ');
             command = mx_strdup(parameters[0]);
 
-            if (mx_execute_builtin(command, parameters, &commands_arr, i))
+            if (mx_execute_builtin(command, parameters, &commands_arr, i)) {
+                mx_apply_escapes(&parameters);
                 mx_create_process(command, parameters, commands_arr[i]);
+            }
 
             free(command);
             mx_del_strarr(&parameters);

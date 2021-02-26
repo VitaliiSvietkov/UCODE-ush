@@ -8,8 +8,8 @@ int mx_command_substitution(char **str) {
     char *ptr = mx_strchr(data, '`');
     if (ptr) {
         if (mx_count_substr(ptr, "`") % 2 != 0) {
-            mx_printerr("ush: unmatched: `\n");
-            return 1;
+            //mx_printerr("ush: unmatched: `\n");
+            return 0;
         }
         while (ptr != NULL) {
             char *tmp_ptr = ptr;
@@ -147,8 +147,8 @@ int mx_command_substitution(char **str) {
             continue;
         }
         if (mx_count_substr(ptr, "}") != mx_count_substr(ptr, "{")) {
-            mx_printerr("ush: unmatched: }\n");
-            return 1;
+            //mx_printerr("ush: unmatched: }\n");
+            break;
         }
         char *tmp_ptr = ptr;
         if (*(ptr + 1) == '{') {
@@ -207,8 +207,8 @@ int mx_command_substitution(char **str) {
             continue;
         }
         if (mx_count_substr(ptr, ")") != mx_count_substr(ptr, "(")) {
-            mx_printerr("ush: unmatched: )\n");
-            return 1;
+            //mx_printerr("ush: unmatched: )\n");
+            break;
         }
         char *tmp_ptr = ptr;
         int ptr_len = mx_strlen(ptr) + 2;
