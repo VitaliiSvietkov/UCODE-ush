@@ -17,6 +17,18 @@ int main(void) {
         mx_read_command(&line);
 
         char **commands_arr = mx_strsplit(line, ';');
+        for (int i = 0; commands_arr[i] != NULL; i++) {
+            char *ptr = commands_arr[i];
+            char *tmp_ptr = ptr;
+            while (*tmp_ptr != '\0' && !mx_isalpha(*tmp_ptr)) {
+                *tmp_ptr = '\0';
+                for (; *(tmp_ptr + 1) != '\0';) {
+                    mx_swap_char(tmp_ptr, tmp_ptr + 1);
+                    tmp_ptr++;
+                }
+                tmp_ptr = ptr;
+            }
+        }
         free(line);
         line = NULL;
 
