@@ -130,7 +130,6 @@ int mx_builtin_cd(char **params, t_flags_cd *flags) {
         break;
     }
 
-    printf("%s\n", path);
     char *tilda_path = rep_substr(path, "~", t_global.HOME);//mx_rep_tilda(path);
     if (tilda_path == NULL)
         tilda_path = mx_strdup(path);

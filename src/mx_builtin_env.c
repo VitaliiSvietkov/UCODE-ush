@@ -20,7 +20,6 @@ int mx_builtin_env(t_flags_env *flags, char **data) {
                 environ = NULL;
                 
                 if (data[2] != NULL) {
-                    mx_print_strarr(data + 2, "\n");
                     char **path_dir = mx_strsplit(t_global.PATH, ':');
 
                     for (int i = 0; path_dir[i] != NULL; i++) {

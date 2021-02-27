@@ -248,6 +248,9 @@ static void apply_escapes(char **str) {
             case 'a':
                 *slash_ptr = '\a';
                 break;
+            case 'v':
+                *slash_ptr = '\v';
+                break;
             default:
                 break;
             }

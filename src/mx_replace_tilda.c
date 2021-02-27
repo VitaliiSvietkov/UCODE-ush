@@ -68,7 +68,8 @@ void mx_replace_tilda(char **str) {
     // Loop for '~user/foo'
     while (true) {
         index = mx_get_char_index(*str, '~');
-        if (index == -1 || (*str)[index + 1] == ' ' || (*str)[index + 1] == '\0')
+        char *ptr = mx_strchr(*str, '~');
+        if (index == -1 || (*str)[index + 1] == ' ' || (*str)[index + 1] == '\0' || !mx_isalpha(*(ptr + 1)))
             break;
         tmp = malloc(PATH_MAX);
         mx_memset(tmp, 0, PATH_MAX);
