@@ -1,9 +1,11 @@
 #include "../inc/ush.h"
 
 static void apply_escapes(char **str);
+static void del_extra_spaces(char **str);
 
 int mx_builtin_echo(t_flags_echo *flags, char **str) {
-    
+    del_extra_spaces(str);
+    *str = mx_strtrim(*str);
     apply_escapes(str);
 
     char **data = mx_strsplit(*str, '>');
@@ -212,20 +214,20 @@ static void apply_escapes(char **str) {
             case '\\':
                 *slash_ptr = '\\';
                 break;
-            case '\'':
-                *slash_ptr = '\'';
-                break;
-            case '"':
-                *slash_ptr = '\"';
-                break;
-            case '`':
-                *slash_ptr = '`';
-                break;
             case 'a':
                 *slash_ptr = '\a';
                 break;
             case 'v':
                 *slash_ptr = '\v';
+                break;
+            case 'b':
+                *slash_ptr = '\b';
+                break;
+            case 'f':
+                *slash_ptr = '\f';
+                break;
+            case 'r':
+                *slash_ptr = '\r';
                 break;
             default:
                 break;
@@ -263,20 +265,20 @@ static void apply_escapes(char **str) {
             case '\\':
                 *slash_ptr = '\\';
                 break;
-            case '\'':
-                *slash_ptr = '\'';
-                break;
-            case '"':
-                *slash_ptr = '\"';
-                break;
-            case '`':
-                *slash_ptr = '`';
-                break;
             case 'a':
                 *slash_ptr = '\a';
                 break;
             case 'v':
                 *slash_ptr = '\v';
+                break;
+            case 'b':
+                *slash_ptr = '\b';
+                break;
+            case 'f':
+                *slash_ptr = '\f';
+                break;
+            case 'r':
+                *slash_ptr = '\r';
                 break;
             default:
                 break;
@@ -294,4 +296,10 @@ static void apply_escapes(char **str) {
             slash_ptr = mx_strchr(ptr, '\\');
         }
     }
+}
+
+static void del_extra_spaces(char **str) {
+    if (strchr(*str, '"') || strchr(*str, '\''))
+        return;
+    *str = mx_delete_extra_spaces(*str);
 }
