@@ -20,14 +20,14 @@ int mx_builtin_which(t_flags_which *flags, char **data) {
         while (data[i] != NULL) {
             for (int z = 0; z < 8; z++) {
                 if (!mx_strcmp(builtins[z], data[i])) {
-                    mx_printstr(data[i]);
-                    mx_printstr(": ush built-in command\n");
+                    mx_printerr(data[i]);
+                    mx_printerr(": ush built-in command\n");
                     found = true;
                     break;
                 }
             }
             if (!mx_strcmp(data[i], "export")) {
-                mx_printstr("export: ush reserved word\n");
+                mx_printerr("export: ush reserved word\n");
                 found = true;
             }
 
@@ -39,8 +39,8 @@ int mx_builtin_which(t_flags_which *flags, char **data) {
                     found = true;
                 }
                 else {
-                    mx_printstr(data[i]);
-                    mx_printstr(" not found\n");
+                    mx_printerr(data[i]);
+                    mx_printerr(" not found\n");
                     i++;
                     found = true;
                     here = false;
@@ -69,8 +69,8 @@ int mx_builtin_which(t_flags_which *flags, char **data) {
             }
             if (found == false) {
                 here = false;
-                mx_printstr(data[i]);
-                mx_printstr(" not found\n");
+                mx_printerr(data[i]);
+                mx_printerr(" not found\n");
             }
             i++;
         }
@@ -95,8 +95,8 @@ int mx_builtin_which(t_flags_which *flags, char **data) {
             int built = 0;
             for (int z = 0; z < 8; z++) {
                 if (!mx_strcmp(builtins[z], data[i])) {
-                    mx_printstr(data[i]);
-                    mx_printstr(": ush built-in command\n");
+                    mx_printerr(data[i]);
+                    mx_printerr(": ush built-in command\n");
                     found = true;
                     built = 1;
                     i++;
@@ -109,7 +109,7 @@ int mx_builtin_which(t_flags_which *flags, char **data) {
                 continue;
             }
             if (!mx_strcmp(data[i], "export")) {
-                mx_printstr("export: ush reserved word\n");
+                mx_printerr("export: ush reserved word\n");
                 found = true;
                 i++;
                 continue;
@@ -125,8 +125,8 @@ int mx_builtin_which(t_flags_which *flags, char **data) {
                     continue;
                 }
                 else {
-                    mx_printstr(data[i]);
-                    mx_printstr(" not found\n");
+                    mx_printerr(data[i]);
+                    mx_printerr(" not found\n");
                     i++;
                     found = true;
                     here = false;
@@ -156,8 +156,8 @@ int mx_builtin_which(t_flags_which *flags, char **data) {
 
             if (found == false) {
                 here = false;
-                mx_printstr(data[i]);
-                mx_printstr(" not found\n");
+                mx_printerr(data[i]);
+                mx_printerr(" not found\n");
             }
             found = false;
             i++;
