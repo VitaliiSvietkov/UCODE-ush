@@ -12,6 +12,8 @@ int mx_builtin_which(t_flags_which *flags, char **data) {
 
     if (flags->using_A) {
         int i = 2;
+        if (data[i] == NULL)
+            return 1;
         char *name = NULL;
         char **path_dir = mx_strsplit(getenv("PATH"), ':');
 

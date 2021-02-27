@@ -42,6 +42,8 @@ int mx_builtin_echo(t_flags_echo *flags, char **str) {
         tmp_ptr = ptr;
     }
 
+    tmp_ptr = ptr;
+
     if(flags->using_N) {
         bool isWrite = true;
         char *str = NULL;
