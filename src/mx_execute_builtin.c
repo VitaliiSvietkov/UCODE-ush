@@ -79,7 +79,7 @@ int mx_execute_builtin(char *command, char **params, char ***commands_arr, int i
         t_flags_echo echo_flags;
         mx_echo_flags_init(&echo_flags);
         if (!mx_echo_flags_set(&echo_flags, params))
-            t_global.exit_status = mx_builtin_echo(&echo_flags, commands_arr[i]);
+            t_global.exit_status = mx_builtin_echo(&echo_flags, &(*commands_arr)[i]);
         else
             t_global.exit_status = 1;
         return 0;

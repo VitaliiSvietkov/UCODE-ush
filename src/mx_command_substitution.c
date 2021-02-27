@@ -146,10 +146,10 @@ int mx_command_substitution(char **str) {
             ptr = strchr(++ptr, '$');
             continue;
         }
-        if (mx_count_substr(ptr, "}") != mx_count_substr(ptr, "{")) {
+        /*if (mx_count_substr(ptr, "}") != mx_count_substr(ptr, "{")) {
             //mx_printerr("ush: unmatched: }\n");
             break;
-        }
+        }*/
         char *tmp_ptr = ptr;
         if (*(ptr + 1) == '{') {
             int ptr_len = mx_strlen(ptr) + 2;
@@ -206,10 +206,10 @@ int mx_command_substitution(char **str) {
             ptr = strchr(++ptr, '$');
             continue;
         }
-        if (mx_count_substr(ptr, ")") != mx_count_substr(ptr, "(")) {
+        /*if (mx_count_substr(ptr, ")") != mx_count_substr(ptr, "(")) {
             //mx_printerr("ush: unmatched: )\n");
             break;
-        }
+        }*/
         char *tmp_ptr = ptr;
         int ptr_len = mx_strlen(ptr) + 2;
         char *str_to_replace = mx_strnew(ptr_len);

@@ -90,6 +90,8 @@ void mx_replace_tilda(char **str) {
         index = mx_get_char_index(*str, '~');
         if (index == -1)
             break;
+        
+        //*str = rep_substr(*str, "~", t_global.HOME);
         tmp = malloc(PATH_MAX);
         mx_memset(tmp, 0, PATH_MAX);
         mx_memcpy(tmp, *str, index);
