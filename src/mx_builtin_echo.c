@@ -210,6 +210,7 @@ static void apply_escapes(char **str) {
                 mx_swap_char(slash_ptr, slash_ptr + 1);
                 slash_ptr++;
             }
+            slash_ptr = ptr + 1;
 
             if (mx_get_char_index(slash_ptr, '\\') > mx_get_char_index(slash_ptr, '"') || mx_get_char_index(slash_ptr, '\\') == -1) {
                 ptr = mx_strchr(slash_ptr, '\'');
