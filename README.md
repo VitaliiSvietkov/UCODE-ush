@@ -1,6 +1,6 @@
 # <p align=center> UCODE-ush </p>
 
-<p> This is my implementation of the command-line interpriter with features without which there can be no shell. **Zsh** was taken as a reference. The shell has the default prompt look like ```u$h>```, followed by a space character and deals only with *one line* user input. The shell was implemented mainly for Mac OSX, but it can be also used on other UNIX like systems but for successful compilation it can be necessary to change includes for the linker.</p>
+This is my implementation of the command-line interpriter with features without which there can be no shell. <b>Zsh</b> was taken as a reference. The shell has the default prompt look like ```u$h>```, followed by a space character and deals only with *one line* user input. The shell was implemented mainly for Mac OSX, but it can be also used on other UNIX like systems but for successful compilation it can be necessary to change includes for the linker.
 
 <h1 align=center> Installation </h1>
 
