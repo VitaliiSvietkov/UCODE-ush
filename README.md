@@ -40,4 +40,4 @@ echo [ -neE ] [ *arg ...* ] | Write each arg on the standard output, with a spac
 
 <h1 align=center> Authors </h1>
 
-<p align=center><img src="https://avatars.githubusercontent.com/u/61375757?s=460&u=0bbb6bba911c39806ee1e3de6a3b34f093279545&v=4" width="300" height="300" alt="https://github.com/VitaliiSvietkov"> <img src="https://avatars.githubusercontent.com/u/73128022?s=460&u=5b915faf9d1090631bd4afa3ac02a3eedbb40c99&v=4" width="300" height="300" alt="https://github.com/NogaKazaha"></p>
+<p align=center><a href="https://github.com/VitaliiSvietkov"><img src="https://avatars.githubusercontent.com/u/61375757?s=460&u=0bbb6bba911c39806ee1e3de6a3b34f093279545&v=4" width="300" height="300" alt="https://github.com/VitaliiSvietkov"></a> <a href="https://github.com/NogaKazaha"><img src="https://avatars.githubusercontent.com/u/73128022?s=460&u=5b915faf9d1090631bd4afa3ac02a3eedbb40c99&v=4" width="300" height="300" alt="https://github.com/NogaKazaha"></a></p>
